@@ -94,7 +94,7 @@ async function askGemini(prompt) {
 // ==============================
 // COMMAND HANDLER
 // ==============================
-async function handleCommand(cmd) {
+/*async function handleCommand(cmd) {
     const apps = {
         "whatsapp": "https://whatsapp.com",
         "youtube": "https://youtube.com",
@@ -126,6 +126,33 @@ async function handleCommand(cmd) {
     output.innerText = "Jarvis is thinking...";
     const reply = await askGemini(cmd);
     speak(reply);
+}*/
+
+async function handleCommand(cmd) {
+    // 1. Social Media & Apps (Action First)
+    if (cmd.includes("open youtube")) {
+        speak("Opening YouTube, Sir.");
+        window.open("https://www.youtube.com", "_blank");
+    } 
+    else if (cmd.includes("open facebook")) {
+        speak("Opening Facebook for you, Sir.");
+        window.open("https://www.facebook.com", "_blank");
+    } 
+    else if (cmd.includes("open instagram")) {
+        speak("Right away Sir, opening Instagram.");
+        window.open("https://www.instagram.com", "_blank");
+    }
+    else if (cmd.includes("open google")) {
+        speak("Opening Google search, Sir.");
+        window.open("https://www.google.com", "_blank");
+    }
+
+    // 2. Agar upar wala koi command nahi match hota, tab Gemini se pucho
+    else {
+        output.innerText = "Jarvis is thinking...";
+        const reply = await askGemini(cmd);
+        speak(reply);
+    }
 }
 
 
