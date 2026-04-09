@@ -258,8 +258,8 @@ function setStatus(text) {
 function speak(text) {
 
        window.speechSynthesis.cancel()
-    //output.innerText = "JARVIS: " + text; 
-    typeText("JARVIS: " + text);
+    output.innerText = "JARVIS: " + text; 
+    //typeText("JARVIS: " + text);
     const speech = new SpeechSynthesisUtterance(text);
     speech.lang = "en-IN"; // Set to Indian accent for Hinglish
 
