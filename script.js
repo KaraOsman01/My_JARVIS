@@ -213,7 +213,7 @@ recognition.onstart = () => {
 
 recognition.onend = () => {
     console.log("🛑 Stopped listening - Sync standby.");
-    try { recognition.start(); } catch(e) {}
+    /*try { recognition.start(); } catch(e) {}*/
 };
 
 /* NEW BLOCK 2
