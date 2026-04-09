@@ -222,41 +222,14 @@ recognition.onend = () => {
     console.log("🛑 Stopped listening - Sync standby.");
 };
 
-// ==================================================================
-//  COD3 FOR AI TEXT
-// ====================
-function typeText(text) {
-  let i = 0;
-  output.innerText = "";
-
-  const interval = setInterval(() => {
-    output.innerText += text[i];
-    i++;
-    if (i >= text.length) clearInterval(interval);
-  }, 15);
-}
-
-function playBeep() {
-  const audio = new Audio("https://www.soundjay.com/buttons/beep-07.wav");
-  audio.play();
-}
-
-if (command.startsWith("jarvis")) {
-    playBeep();
-
-function setStatus(text) {
-  document.getElementById("output").innerText = text;
-
-// =========================================================================
-
 // ==============================
 // CUSTOM SMART SPEAK
 // ==============================
 function speak(text) {
 
        window.speechSynthesis.cancel()
-    //output.innerText = "JARVIS: " + text; 
-    typeText("JARVIS: " + text);
+    output.innerText = "JARVIS: " + text; 
+    
     const speech = new SpeechSynthesisUtterance(text);
     speech.lang = "en-IN"; // Set to Indian accent for Hinglish
 
