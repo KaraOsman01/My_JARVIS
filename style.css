@@ -38,8 +38,6 @@ h1 {
 }
 
 button {
-  height: 5px;
-  width: 5px;
   position: absolute;
   bottom: 40px;
   left: 40%;
@@ -50,7 +48,7 @@ button {
   border-radius: 50%;
   font-size: 20px;
   color: #00f7ff;
-  box-shadow: 0 0 45px #00f7ff;
+  box-shadow: 0 0 0px #00f7ff;
   cursor: pointer;
   animation: neonPulse 1.5s infinite alternate ease-in-out;
 }
