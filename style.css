@@ -13,7 +13,7 @@ body {
 
 .container {
   text-align: center;
-  margin-top: 20%;
+  margin-top: 10%;
 }
 
 h1 {
@@ -30,6 +30,7 @@ h1 {
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 18px;
+  transition: all 0.3s ease;
   color: cyan;
 /* margin: 20px;*/
   font-size: 1.2rem;
@@ -40,7 +41,7 @@ button {
   position: absolute;
   bottom: 40px;
   left: 50%;
-  transform: translateX(-50%);
+  /*transform: translateX(-50%);*/
   background: transparent;
   border: 2px solid #00f7ff;
   padding: 15px;
