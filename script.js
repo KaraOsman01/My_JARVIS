@@ -222,7 +222,7 @@ recognition.onend = () => {
     console.log("🛑 Stopped listening - Sync standby.");
 };
 
-/* ==================================================================
+// ==================================================================
 //  COD3 FOR AI TEXT
 // ====================
 function typeText(text) {
@@ -247,10 +247,7 @@ if (command.startsWith("jarvis")) {
 function setStatus(text) {
   document.getElementById("output").innerText = text;
 
-function setStatus(text) {
-  document.getElementById("output").innerText = text;
-
-// =========================================================================*/
+// =========================================================================
 
 // ==============================
 // CUSTOM SMART SPEAK
