@@ -50,7 +50,7 @@ recognition.onresult = async (event) => {
     }
 };
 
-// --- SPEAK FUNCTION (AI Jawab Dene Ke Baad Mic On Karega) ---
+/* --- SPEAK FUNCTION (AI Jawab Dene Ke Baad Mic On Karega) ---
 function speak(text) {
     const speech = new SpeechSynthesisUtterance(text);
     speech.lang = "en-IN";
@@ -66,7 +66,7 @@ function speak(text) {
     };
 
     window.speechSynthesis.speak(speech);
-}
+}*/
 
 // ==============================
 // GEMINI API (AI BRAIN)
@@ -213,15 +213,8 @@ recognition.onstart = () => {
 
 recognition.onend = () => {
     console.log("🛑 Stopped listening - Sync standby.");
-    /*try { recognition.start(); } catch(e) {}*/
 };
 
-/* NEW BLOCK 2
-
-recognition.onend = () => {
-    console.log("Restarting mic...");
-    try { recognition.start(); } catch(e) {}
-};*/
 
 // ==============================
 // CUSTOM SMART SPEAK
@@ -234,6 +227,8 @@ function speak(text) {
     const speech = new SpeechSynthesisUtterance(text);
     speech.lang = "en-IN"; // Set to Indian accent for Hinglish
 
+     recognition.stop();
+    
     // Peak reaction when speaking
     updateVisualCoreState('speaking', "JARVIS: " + text);
  // Change to speaking waves
@@ -241,10 +236,14 @@ function speak(text) {
     // Bolne ke baad mic standby mode pe jayega
     speech.onend = () => {
         console.log("Jarvis finished speaking.");
-        updateVisualCoreState('idle'); 
+
+        recognition.start();
+        output.innerText = "Listening Again Sir";
+        
+        //updateVisualCoreState('idle'); 
         setTimeout(() => {
             try { recognition.start(); } catch(e) {} 
-        }, 1000);  
+        }, 500);  
     };
 
     window.speechSynthesis.speak(speech);
