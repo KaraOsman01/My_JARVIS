@@ -9,7 +9,7 @@ const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecogni
 const recognition = new SpeechRecognition();
 recognition.lang = "en-IN";
 
-recognition.continuous = true;
+recognition.continuous = false;
 recognition.interimResults = false;
 
 // --- START LISTENING ---
