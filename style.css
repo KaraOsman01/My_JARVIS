@@ -7,9 +7,9 @@ body {
   justify-content: space-between;
   background: #0a0a0a;
   color: #00f7ff;
-  font-family: 'Orbitron', sans-serif;
+  /*font-family: 'Orbitron', sans-serif;*/
   text-align: center;
-  background: radial-gradient(circle at center, #001a1a, black);
+  /*background: radial-gradient(circle at center, #001a1a, black);*/
   /*animation: bgPulse 4s infinite alternate;*/
 }
 
