@@ -45,9 +45,8 @@ function speak(text) {
 // GEMINI API (AI BRAIN)
 // ==============================
 async function askGemini(prompt) {
-    const API_KEY = "AIzaSyDqAGcxxH15A4r7QKKjisrsHH6k3lJc_Fw";
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent?key=${API_KEY}`;
-
+    const url = "/api/gemini";
+    
     // 1. User message added to history
     chatHistory.push({ role: "user", parts: [{ text: prompt }] });
 
