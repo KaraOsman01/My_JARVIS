@@ -53,7 +53,7 @@ recognition.onresult = async (event) => {
 // --- SPEAK FUNCTION (AI Jawab Dene Ke Baad Mic On Karega) ---
 function speak(text) {
     const speech = new SpeechSynthesisUtterance(text);
-    speech.lang = "en-US";
+    speech.lang = "en-IN";
 
     // Jab AI bolna shuru kare, mic band kar do taki wo khud ko na sune
     recognition.stop();
@@ -213,6 +213,7 @@ recognition.onstart = () => {
 
 recognition.onend = () => {
     console.log("🛑 Stopped listening - Sync standby.");
+    try { recognition.start(); } catch(e) {}
 };
 
 /* NEW BLOCK 2
@@ -243,7 +244,7 @@ function speak(text) {
         updateVisualCoreState('idle'); 
         setTimeout(() => {
             try { recognition.start(); } catch(e) {} 
-        }, 500);  
+        }, 1000);  
     };
 
     window.speechSynthesis.speak(speech);
