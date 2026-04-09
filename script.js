@@ -243,7 +243,7 @@ function speak(text) {
         //updateVisualCoreState('idle'); 
         setTimeout(() => {
             try { recognition.start(); } catch(e) {} 
-        }, 500);  
+        }, 200);  
     };
 
     window.speechSynthesis.speak(speech);
