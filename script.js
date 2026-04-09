@@ -173,12 +173,12 @@ async function handleCommand(cmd) {
         window.open("https://www.google.com", "_blank");
     }
 
-    else if (cmd.includes("search for")) {
+ /*   else if (cmd.includes("search for")) {
         let searchTerm = cmd.replace("search for", "").trim();
         window.open(`https://google.com/search?q=${searchTerm}`, "_blank");
         speak("Searching Google for " + searchTerm);
         return;
-    }  
+    }  */
 
     // 2. Agar upar wala koi command nahi match hota, tab Gemini se pucho
     else {
