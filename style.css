@@ -77,8 +77,8 @@ button:hover {
 
 .mic-btn-container {
   position: relative;
-  width: 10px; /* Thoda bada space waves ke liye */
-  height: 10px;
+  width: 150px; /* Thoda bada space waves ke liye */
+  height: 150px;
   display: flex;
   justify-content: center;
   align-items: center;
