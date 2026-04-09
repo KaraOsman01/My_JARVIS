@@ -18,8 +18,8 @@ body {
 }
 
 h1 {
-  font-size: 3rem;
-  text-shadow: 0 0 20px #00f7ff;
+  font-size: 5rem;
+  text-shadow: 10 15 20px #00f7ff;
 }
 
 #output {
