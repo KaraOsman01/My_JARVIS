@@ -27,9 +27,13 @@ micBtn.addEventListener("click", () => {
 
 recognition.onresult = async (event) => {
     const command = event.results[event.results.length - 1][0].transcript.toLowerCase();
-
+    
+    output.innerText = "You: " + command;
+    
     console.log("Heard:", command);
 
+    await handleCommand(command.toLowerCase());
+      
     // Wake word check
     if (command.startsWith("jarvis")) {
 
