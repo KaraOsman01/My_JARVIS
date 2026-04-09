@@ -9,9 +9,6 @@ const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecogni
 const recognition = new SpeechRecognition();
 recognition.lang = "en-IN";
 
-recognition.continuous = false;
-recognition.interimResults = false;
-
 // --- START LISTENING ---
 micBtn.addEventListener("click", () => {
     recognition.start();
@@ -210,16 +207,16 @@ recognition.onstart = () => {
     updateVisualCoreState('listening'); // Change to listening waves
 };
 
-/*recognition.onend = () => {
+recognition.onend = () => {
     console.log("🛑 Stopped listening - Sync standby.");
-};*/
+};
 
-// NEW BLOCK 2
+/* NEW BLOCK 2
 
 recognition.onend = () => {
     console.log("Restarting mic...");
     try { recognition.start(); } catch(e) {}
-};
+};*/
 
 // ==============================
 // CUSTOM SMART SPEAK
