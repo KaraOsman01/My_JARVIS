@@ -80,18 +80,19 @@ button {
   color: #00f7ff;
   box-shadow: 0 0 15px #00f7ff;
   cursor: pointer;
-  animation: neonPulse 1.5s infinite alternate ease-in-out;
+  /*animation: neonPulse 1.5s infinite alternate ease-in-out;*/
 }
-@keyframes neonPulse {
+
+/*@keyframes neonPulse {
     from {
-        /* Choti aur halki shadow */
+        /* Choti aur halki shadow 
         box-shadow: 0 0 10px #00ffff, 0 0 20px rgba(0, 255, 255, 0.2);
     }
     to {
-        /* Badi aur bright shadow (Glow effect) */
+        /* Badi aur bright shadow (Glow effect) 
         box-shadow: 0 0 25px #00ffff, 0 0 50px #00ffff, 0 0 80px rgba(0, 255, 255, 0.6);
     }
-}
+}*/
 
 button:hover {
   box-shadow: 0 0 30px #00f7ff;
