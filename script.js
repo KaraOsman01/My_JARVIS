@@ -9,18 +9,44 @@ const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecogni
 const recognition = new SpeechRecognition();
 recognition.lang = "en-IN";
 
+recognition.continuous = true;
+recognition.interimResults = false;
+
 // --- START LISTENING ---
 micBtn.addEventListener("click", () => {
     recognition.start();
     output.innerText = "Listening...";
 });
 
-recognition.onresult = async (event) => {
+/*recognition.onresult = async (event) => {
     const command = event.results[0][0].transcript;
     output.innerText = "You: " + command;
     
     // Yahan handleCommand function ko call karein
     await handleCommand(command.toLowerCase());
+};*/
+
+//NEW CODE
+
+recognition.onresult = async (event) => {
+    const command = event.results[event.results.length - 1][0].transcript.toLowerCase();
+
+    console.log("Heard:", command);
+
+    // Wake word check
+    if (command.startsWith("jarvis")) {
+
+        let cleanCommand = command.replace("jarvis", "").trim();
+
+        if (!cleanCommand) return;
+
+        output.innerText = "You: " + cleanCommand;
+
+        await handleCommand(cleanCommand);
+    } 
+    else {
+        console.log("Ignored (no wake word)");
+    }
 };
 
 // --- SPEAK FUNCTION (AI Jawab Dene Ke Baad Mic On Karega) ---
@@ -184,8 +210,15 @@ recognition.onstart = () => {
     updateVisualCoreState('listening'); // Change to listening waves
 };
 
-recognition.onend = () => {
+/*recognition.onend = () => {
     console.log("🛑 Stopped listening - Sync standby.");
+};*/
+
+// NEW BLOCK 2
+
+recognition.onend = () => {
+    console.log("Restarting mic...");
+    try { recognition.start(); } catch(e) {}
 };
 
 // ==============================
