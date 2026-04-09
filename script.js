@@ -222,7 +222,7 @@ recognition.onend = () => {
     console.log("🛑 Stopped listening - Sync standby.");
 };
 
-// ==================================================================
+/* ==================================================================
 //  COD3 FOR AI TEXT
 // ====================
 function typeText(text) {
@@ -250,7 +250,7 @@ function setStatus(text) {
 function setStatus(text) {
   document.getElementById("output").innerText = text;
 
-// =========================================================================
+// =========================================================================*/
 
 // ==============================
 // CUSTOM SMART SPEAK
