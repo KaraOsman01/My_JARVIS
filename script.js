@@ -173,6 +173,13 @@ async function handleCommand(cmd) {
         window.open("https://www.google.com", "_blank");
     }
 
+    else if (cmd.includes("search for")) {
+        let searchTerm = cmd.replace("search for", "").trim();
+        window.open(`https://google.com/search?q=${searchTerm}`, "_blank");
+        speak("Searching Google for " + searchTerm);
+        return;
+    }  
+
     // 2. Agar upar wala koi command nahi match hota, tab Gemini se pucho
     else {
         output.innerText = "Jarvis is thinking...";
@@ -215,6 +222,35 @@ recognition.onend = () => {
     console.log("🛑 Stopped listening - Sync standby.");
 };
 
+// ==================================================================
+//  COD3 FOR AI TEXT
+// ====================
+function typeText(text) {
+  let i = 0;
+  output.innerText = "";
+
+  const interval = setInterval(() => {
+    output.innerText += text[i];
+    i++;
+    if (i >= text.length) clearInterval(interval);
+  }, 15);
+}
+
+function playBeep() {
+  const audio = new Audio("https://www.soundjay.com/buttons/beep-07.wav");
+  audio.play();
+}
+
+if (command.startsWith("jarvis")) {
+    playBeep();
+
+function setStatus(text) {
+  document.getElementById("output").innerText = text;
+
+function setStatus(text) {
+  document.getElementById("output").innerText = text;
+
+// =========================================================================
 
 // ==============================
 // CUSTOM SMART SPEAK
@@ -222,8 +258,8 @@ recognition.onend = () => {
 function speak(text) {
 
        window.speechSynthesis.cancel()
-    output.innerText = "JARVIS: " + text; 
-  
+    //output.innerText = "JARVIS: " + text; 
+    typeText("JARVIS: " + text);
     const speech = new SpeechSynthesisUtterance(text);
     speech.lang = "en-IN"; // Set to Indian accent for Hinglish
 
