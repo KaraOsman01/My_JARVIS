@@ -238,9 +238,8 @@ function speak(text) {
         console.log("Jarvis finished speaking.");
 
         recognition.start();
-        output.innerText = "Listening Again Sir";
         
-        //updateVisualCoreState('idle'); 
+        updateVisualCoreState('idle'); 
         setTimeout(() => {
             try { recognition.start(); } catch(e) {} 
         }, 200);  
