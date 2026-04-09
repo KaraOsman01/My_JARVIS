@@ -79,7 +79,7 @@ async function askGemini(prompt) {
     const requestBody = {
         contents: chatHistory,
         system_instruction: {
-            parts: [{ text: "You are Jarvis, a witty and helpful AI assistant. Remember user's personal details and keep answers short." }]
+            parts: [{ text: "You are Jarvis, a witty and helpful AI assistant. Remember user's personal details and keep answers user friendly ." }]
         }
     };
 
