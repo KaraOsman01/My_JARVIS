@@ -21,7 +21,7 @@ micBtn.addEventListener("click", () => {
 
 // RESULT
 recognition.onresult = async (event) => {
-    const command = event.results[0][0].transcript.toLowerCase();
+    const command = event.results[1][0].transcript.toLowerCase();
 
     output.innerText = "You: " + command;
 
@@ -112,7 +112,7 @@ async function askGemini(prompt) {
 // ==============================
 
 async function handleCommand(cmd) {
-    const command = cmd.toLowerCase();
+    //const command = cmd.toLowerCase();
 
      // Ek generic function banayein jo link kholne se pehle Jarvis ko bolne de
       const openWithDelay = (url, msg) => {
