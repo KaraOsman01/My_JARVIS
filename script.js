@@ -5,15 +5,34 @@ let chatHistory = [];
 const output = document.getElementById("output");
 const micBtn = document.getElementById("micBtn");
 
+let isJarvisSpeaking = false; // Flag to track if AI is talking
+
+
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = new SpeechRecognition();
 recognition.lang = "en-IN";
+
+recognition.continuous = false; // Keep false to process discrete chunks (more stable for wake words)
+recognition.interimResults = false;
 
 // --- START LISTENING ---
 micBtn.addEventListener("click", () => {
     recognition.start();
     output.innerText = "Listening...";
 });
+
+// 2. Controlled Restart Function
+function startListeningSafely() {
+    // Only restart if not already speaking and mic is off
+    if (!isJarvisSpeaking) {
+        try {
+            recognition.start();
+            console.log("System listening for wake word...");
+        } catch (e) {
+            // Already started, ignore error
+        }
+    }
+}
 
 /*recognition.onresult = async (event) => {
     const command = event.results[0][0].transcript;
@@ -25,7 +44,7 @@ micBtn.addEventListener("click", () => {
 
 //NEW CODE
 
-recognition.onresult = async (event) => {
+/*recognition.onresult = async (event) => {
     const command = event.results[event.results.length - 1][0].transcript.toLowerCase();
     
     output.innerText = "You: " + command;
@@ -48,6 +67,29 @@ recognition.onresult = async (event) => {
     else {
         console.log("Ignored (no wake word)");
     }
+};*/
+
+// 3. Result Handler
+recognition.onresult = async (event) => {
+    const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();
+    console.log("Heard:", transcript);
+
+    if (transcript.includes("jarvis")) {
+        let cleanCommand = transcript.split("jarvis").pop().trim();
+        if (cleanCommand) {
+            await handleCommand(cleanCommand);
+        } else {
+            speak("Yes Sir, I am listening.");
+        }
+    }
+};
+
+// 4. Loop Prevention on End
+recognition.onend = () => {
+    // Rapid looping prevent karne ke liye 300ms ka gap
+    setTimeout(() => {
+        startListeningSafely();
+    }, 300);
 };
 
 /* --- SPEAK FUNCTION (AI Jawab Dene Ke Baad Mic On Karega) ---
@@ -228,12 +270,18 @@ recognition.onend = () => {
 function speak(text) {
 
        window.speechSynthesis.cancel()
-    output.innerText = "JARVIS: " + text; 
+
+      isJarvisSpeaking = true; // Mark as speaking
+    recognition.stop();      // Stop mic immediately
+    
+    //output.innerText = "JARVIS: " + text; 
     
     const speech = new SpeechSynthesisUtterance(text);
     speech.lang = "en-IN"; // Set to Indian accent for Hinglish
 
-     recognition.stop();
+     //recognition.stop();
+
+    speech.onstart = () => updateVisualCoreState('speaking', "JARVIS: " + text);
     
     // Peak reaction when speaking
     updateVisualCoreState('speaking', "JARVIS: " + text);
@@ -241,14 +289,16 @@ function speak(text) {
 
     // Bolne ke baad mic standby mode pe jayega
     speech.onend = () => {
-        console.log("Jarvis finished speaking.");
+        isJarvisSpeaking = false; 
+        //console.log("Jarvis finished speaking.");
 
-        recognition.start();
+        //recognition.start();
         
         updateVisualCoreState('idle'); 
+        console.log("Speaking finished. Re-syncing mic...");
         setTimeout(() => {
             try { recognition.start(); } catch(e) {} 
-        }, 200);  
+        }, 1000);  
     };
 
     window.speechSynthesis.speak(speech);
