@@ -268,7 +268,7 @@ function speak(text) {
         } catch(e) {
             console.log("Mic restart skipped: Already active.");
         }
-    }, 500);"
+    }, 500);
 
     };
 
