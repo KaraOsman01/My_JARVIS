@@ -9,6 +9,7 @@ body {
   color: #00f7ff;
   font-family: 'Orbitron', sans-serif;
   text-align: center;
+  background-image: url(jarvis1.jpeg) center / cover no-repeat fixed;
 }
 
 .container {
