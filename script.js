@@ -163,6 +163,10 @@ async function handleCommand(cmd) {
         speak("Opening Google search, Sir.");
         window.open("https://www.google.com", "_blank");
     }
+     else if (command.includes("open snapchat")) {
+    openAppByPackage("com.snapchat.android", "Snapchat", "_blank");
+      }
+    
 
     else if (cmd.includes("search for")) {
         let searchTerm = cmd.replace("search for", "").trim();
