@@ -197,7 +197,7 @@ async function handleCommand(cmd) {
     else if (cmd.includes("open instagram")) {
        /* speak("Right away Sir, opening Instagram.");
         window.open("https://www.instagram.com", "_blank");*/
-        openWithDelay("https://www.instagram.com", "Right away Sir, opening Instagram.");
+        openWithDelay("https://www.instagram.com", "Right away Sir, opening Instagram.", "_blank");
     }
     else if (cmd.includes("open google")) {
        /* speak("Opening Google search, Sir.");
