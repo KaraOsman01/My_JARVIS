@@ -148,7 +148,7 @@ async function handleCommand(cmd) {
         const packageName = "com.snapchat.android";
         const intentUrl = `intent://#Intent;package=${packageName};S.browser_fallback_url=https://google.com{packageName};end`;
         speak("Opening Snapchat, Sir.");
-        //window.location.href = intentUrl;
+        window.location.href = intentUrl;
          setTimeout(() => {
         window.open(intentUrl, "_blank");
     }, 500); 
