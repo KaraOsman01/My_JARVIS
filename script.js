@@ -22,7 +22,7 @@ micBtn.addEventListener("click", () => {
 });
 
 // 2. Controlled Restart Function
-function startListeningSafely() {
+/*function startListeningSafely() {
     // Only restart if not already speaking and mic is off
     if (!isJarvisSpeaking) {
         try {
@@ -32,7 +32,7 @@ function startListeningSafely() {
             // Already started, ignore error
         }
     }
-}
+}*/
 
 
 // 3. Result Handler
