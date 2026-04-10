@@ -144,14 +144,8 @@ async function handleCommand(cmd) {
        // openWithDelay("https://www.google.com", "Opening Google search, Sir.");
     }
      else if (command.includes("open snapchat")) {
-    // App opening logic
-        const packageName = "com.snapchat.android";
-        const intentUrl = `intent://#Intent;package=${packageName};S.browser_fallback_url=https://google.com{packageName};end`;
-        speak("Opening Snapchat, Sir.");
-        window.location.href = intentUrl;
-         setTimeout(() => {
-        window.open(intentUrl, "_blank");
-    }, 500); 
+          speak("Opening SnapChat, sir");
+          window.open("https://www.snapchat.com", "_blank");
       }
     
 
