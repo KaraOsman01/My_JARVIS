@@ -272,17 +272,13 @@ function speak(text) {
 
        window.speechSynthesis.cancel()
 
-      isJarvisSpeaking = true; // Mark as speaking
-    recognition.stop();      // Stop mic immediately
-    
-    //output.innerText = "JARVIS: " + text; 
+    output.innerText = "JARVIS: " + text; 
     
     const speech = new SpeechSynthesisUtterance(text);
     speech.lang = "en-IN"; // Set to Indian accent for Hinglish
 
-     //recognition.stop();
+     recognition.stop();
 
-    speech.onstart = () => updateVisualCoreState('speaking', "JARVIS: " + text);
     
     // Peak reaction when speaking
     updateVisualCoreState('speaking', "JARVIS: " + text);
@@ -290,13 +286,13 @@ function speak(text) {
 
     // Bolne ke baad mic standby mode pe jayega
     speech.onend = () => {
-        isJarvisSpeaking = false; 
-        //console.log("Jarvis finished speaking.");
 
-        //recognition.start();
+        console.log("Jarvis finished speaking.");
+
+        recognition.start();
         
         updateVisualCoreState('idle'); 
-        console.log("Speaking finished. Re-syncing mic...");
+        
         setTimeout(() => {
             try { recognition.start(); } catch(e) {} 
         }, 1000);  
