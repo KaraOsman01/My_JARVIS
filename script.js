@@ -151,37 +151,58 @@ async function askGemini(prompt) {
 
 async function handleCommand(cmd) {
     const command = cmd.toLowerCase();
+
+     // Ek generic function banayein jo link kholne se pehle Jarvis ko bolne de
+      const openWithDelay = (url, msg) => {
+       speak(msg); // Pehle Jarvis bolega
+        setTimeout(() => {
+          window.open(url, "_blank");
+           }, 1500); // 1.5 second ka gap taaki awaaz poori ho jaye
+        };
+    
     // 1. Social Media & Apps (Action First)
     if (cmd.includes("open youtube")) {
-        speak("Opening YouTube, Sir.");
-        window.open("https://www.youtube.com", "_blank");
+        /*speak("Opening YouTube, Sir.");
+        window.open("https://www.youtube.com", "_blank");*/
+        openWithDelay("https://www.youtube.com", "Opening YouTube, Sir.");
     } 
     else if (cmd.includes("open facebook")) {
-        speak("Opening Facebook for you, Sir.");
-        window.open("https://www.facebook.com", "_blank");
+        /*speak("Opening Facebook for you, Sir.");
+        window.open("https://www.facebook.com", "_blank");*/
+        openWithDelay("https://www.facebook.com", "Opening Facebook for you, Sir.");
     } 
     else if (cmd.includes("open instagram")) {
-        speak("Right away Sir, opening Instagram.");
-        window.open("https://www.instagram.com", "_blank");
+       /* speak("Right away Sir, opening Instagram.");
+        window.open("https://www.instagram.com", "_blank");*/
+        openWithDelay("https://www.instagram.com", "Right away Sir, opening Instagram.");
     }
     else if (cmd.includes("open google")) {
-        speak("Opening Google search, Sir.");
-        window.open("https://www.google.com", "_blank");
+       /* speak("Opening Google search, Sir.");
+        window.open("https://www.google.com", "_blank");*/
+        openWithDelay("https://www.google.com", "Opening Google search, Sir.");
     }
      else if (command.includes("open snapchat")) {
     // App opening logic
         const packageName = "com.snapchat.android";
         const intentUrl = `intent://#Intent;package=${packageName};S.browser_fallback_url=https://google.com{packageName};end`;
         speak("Opening Snapchat, Sir.");
-        window.location.href = intentUrl;
+        //window.location.href = intentUrl;
+         setTimeout(() => {
+        window.open(intentUrl, "_blank");
+    }, 500); 
       }
     
 
     else if (cmd.includes("search for")) {
-        let searchTerm = cmd.replace("search for", "").trim();
+       /* let searchTerm = cmd.replace("search for", "").trim();
         window.open(`https://google.com/search?q=${searchTerm}`, "_blank");
         speak("Searching Google for " + searchTerm);
-        return;
+        return;*/
+        let searchTerm = command.replace("search for", "").trim();
+speak("Searching Google for " + searchTerm);
+setTimeout(() => {
+window.open(https://google.com/search?q=${searchTerm}, "_blank");
+}, 1500);
     }  
 
     // 2. Agar upar wala koi command nahi match hota, tab Gemini se pucho
@@ -192,7 +213,11 @@ async function handleCommand(cmd) {
     }
 }
 
-
+window.onfocus = () => {
+    console.log("Tab focused again. Resetting JARVIS...");
+    isJarvisSpeaking = false; // Flag phir se set karein
+    startListeningSafely();    // Mic phir se shuru karein
+};
 //test code 01
 
 // Function to update the visual state of the neural core
