@@ -219,6 +219,7 @@ function speak(text) {
 
     const speech = new SpeechSynthesisUtterance(text);
     speech.lang = "en-IN";
+    updateVisualCoreState('speaking', "JARVIS: " + text);
 
     recognition.stop();
 
