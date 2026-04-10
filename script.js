@@ -261,16 +261,7 @@ recognition.onstart = () => {
 };
 
 recognition.onend = () => {
-    //console.log("🛑 Stopped listening - Sync standby.");
-    // Agar Jarvis bol nahi raha, toh mic restart karo
-    if (!window.speechSynthesis.speaking) {
-        console.log("Mic timed out. Restarting...");
-        try {
-            recognition.start();
-        } catch (e) {
-            console.error("Restart failed:", e);
-        }
-    }
+    console.log("🛑 Stopped listening - Sync standby.");
 };
 
 
