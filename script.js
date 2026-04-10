@@ -12,7 +12,7 @@ const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecogni
 const recognition = new SpeechRecognition();
 recognition.lang = "en-IN";
 
-recognition.continuous = false; // Keep false to process discrete chunks (more stable for wake words)
+recognition.continuous = true; // Keep false to process discrete chunks (more stable for wake words)
 recognition.interimResults = false;
 
 // --- START LISTENING ---
@@ -261,7 +261,25 @@ recognition.onstart = () => {
 };
 
 recognition.onend = () => {
-    console.log("🛑 Stopped listening - Sync standby.");
+    //console.log("🛑 Stopped listening - Sync standby.");
+    // Agar Jarvis bol nahi raha, toh mic restart karo
+    if (!window.speechSynthesis.speaking) {
+        console.log("Mic timed out. Restarting...");
+        try {
+            recognition.start();
+        } catch (e) {
+            console.error("Restart failed:", e);
+        }
+    }
+};
+};
+
+recognition.onerror = (event) => {
+    console.error("Speech error:", event.error);
+    if (event.error === 'no-speech') {
+        // No speech detected, just restart quietly
+        recognition.stop(); 
+    }
 };
 
 // ==============================
