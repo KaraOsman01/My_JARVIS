@@ -17,7 +17,7 @@ recognition.interimResults = false;
 
 // --- START LISTENING ---
 micBtn.addEventListener("click", () => {
-    //recognition.start();
+    recognition.start();
     startListeningSafely();
     output.innerText = "Listening...";
 });
