@@ -13,7 +13,7 @@ const recognition = new SpeechRecognition();
 recognition.lang = "en-IN";
 
 recognition.continuous = false; // Keep false to process discrete chunks (more stable for wake words)
-recognition.interimResults = false;
+recognition.interimResults = true;
 
 // --- START LISTENING ---
 micBtn.addEventListener("click", () => {
@@ -22,7 +22,7 @@ micBtn.addEventListener("click", () => {
     output.innerText = "Listening...";
 });
 
-/*2. Controlled Restart Function
+2. Controlled Restart Function
 function startListeningSafely() {
     // Only restart if not already speaking and mic is off
     if (!isJarvisSpeaking) {
@@ -34,7 +34,7 @@ function startListeningSafely() {
             // Already started, ignore error
         }
     }
-}*/
+}
 
 
 // 3. Result Handler
@@ -56,13 +56,13 @@ recognition.onresult = async (event) => {
     }
 };
 
-/*4. Loop Prevention on End
+//4. Loop Prevention on End
 recognition.onend = () => {
     // Rapid looping prevent karne ke liye 300ms ka gap
     setTimeout(() => {
         startListeningSafely();
     }, 300);
-};*/
+};
 
 function resetMic() {
     try {
@@ -278,10 +278,10 @@ recognition.onstart = () => {
     console.log("🛑 Stopped listening - Sync standby.");
 };*/
 
-recognition.onend = () => {
+/*recognition.onend = () => {
     console.log("Restarting mic...");
     try { recognition.start(); } catch(e) {}
-};
+};*/
 
 // ==============================
 // CUSTOM SMART SPEAK
