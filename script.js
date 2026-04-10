@@ -95,8 +95,6 @@ recognition.onresult = async (event) => {
     }
 };
     
-};
-
 
 // ==============================
 // GEMINI API (AI BRAIN)
