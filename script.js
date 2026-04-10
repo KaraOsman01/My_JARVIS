@@ -263,3 +263,33 @@ function speak(text) {
 
     window.speechSynthesis.speak(speech);
 }
+
+// Jab aap wapas Jarvis wale tab par aayein, tab mic ko reset karein
+window.onfocus = () => {
+    console.log("Tab focused. Resetting Jarvis system...");
+    
+    // Agar recognition stop ho chuki hai, toh ise restart karein
+    try {
+        recognition.stop(); // Pehle purani state clear karein
+        setTimeout(() => {
+            recognition.start();
+            updateVisualCoreState('idle'); // Visuals ko reset karein
+            output.innerText = "Welcome back, Sir. I am ready.";
+        }, 500);
+    } catch(e) {
+        console.log("Recognition restart failed, likely already running.");
+    }
+};
+
+// Error handling ko thoda aur mazboot karein
+recognition.onerror = (event) => {
+    console.error("Speech Recognition Error:", event.error);
+    if (event.error === 'not-allowed') {
+        output.innerText = "Error: Mic permission denied.";
+    }
+    // Agar mic crash ho jaye, toh 1 second baad restart karein
+    setTimeout(() => {
+        try { recognition.start(); } catch(e) {}
+    }, 1000);
+};
+
