@@ -292,7 +292,7 @@ window.onfocus = () => {
     }
 };
 
-// Error handling ko thoda aur mazboot karein
+/*// Error handling ko thoda aur mazboot karein
 recognition.onerror = (event) => {
     console.error("Speech Recognition Error:", event.error);
     if (event.error === 'not-allowed') {
@@ -302,5 +302,29 @@ recognition.onerror = (event) => {
     setTimeout(() => {
         try { recognition.start(); } catch(e) {}
     }, 1000);
+};*/
+
+function resetMicSystem() {
+    console.log("Re-initializing Mic Engine...");
+    
+    // Purane recognition ko stop karo
+    try { recognition.stop(); } catch(e) {}
+
+    // 1 second ruko phir restart karo
+    setTimeout(() => {
+        try {
+            recognition.start();
+            output.innerText = "System Restored. I am listening, Sir.";
+            updateVisualCoreState('idle');
+        } catch(e) {
+            // Agar phir bhi error de, toh majbooran refresh kar do
+            location.reload(); 
+        }
+    }, 1000);
+}
+
+// Jab wapas aayein toh reset call karein
+window.onfocus = () => {
+    resetMicSystem();
 };
 
