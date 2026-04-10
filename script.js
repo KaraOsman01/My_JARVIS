@@ -173,7 +173,7 @@ async function askGemini(prompt) {
 }*/
 
 async function handleCommand(cmd) {
-    const command = cmd.toLowerCase();
+    //const command = cmd.toLowerCase();
 
      // Ek generic function banayein jo link kholne se pehle Jarvis ko bolne de
       const openWithDelay = (url, msg) => {
@@ -195,9 +195,9 @@ async function handleCommand(cmd) {
         openWithDelay("https://www.facebook.com", "Opening Facebook for you, Sir.");
     } 
     else if (cmd.includes("open instagram")) {
-       /* speak("Right away Sir, opening Instagram.");
-        window.open("https://www.instagram.com", "_blank");*/
-        openWithDelay("https://www.instagram.com", "Right away Sir, opening Instagram.", "_blank");
+       speak("Right away Sir, opening Instagram.");
+        window.open("https://www.instagram.com", "_blank");
+        //openWithDelay("https://www.instagram.com", "Right away Sir, opening Instagram.", "_blank");
     }
     else if (cmd.includes("open google")) {
        /* speak("Opening Google search, Sir.");
