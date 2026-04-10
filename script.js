@@ -34,40 +34,6 @@ function startListeningSafely() {
     }
 }
 
-/*recognition.onresult = async (event) => {
-    const command = event.results[0][0].transcript;
-    output.innerText = "You: " + command;
-    
-    // Yahan handleCommand function ko call karein
-    await handleCommand(command.toLowerCase());
-};*/
-
-//NEW CODE
-
-/*recognition.onresult = async (event) => {
-    const command = event.results[event.results.length - 1][0].transcript.toLowerCase();
-    
-    output.innerText = "You: " + command;
-    
-    console.log("Heard:", command);
-
-    await handleCommand(command.toLowerCase());
-      
-    // Wake word check
-    if (command.startsWith("jarvis")) {
-
-        let cleanCommand = command.replace("jarvis", "").trim();
-
-        if (!cleanCommand) return;
-
-        output.innerText = "You: " + cleanCommand;
-
-        await handleCommand(cleanCommand);
-    } 
-    else {
-        console.log("Ignored (no wake word)");
-    }
-};*/
 
 // 3. Result Handler
 recognition.onresult = async (event) => {
@@ -92,23 +58,6 @@ recognition.onend = () => {
     }, 300);
 };
 
-/* --- SPEAK FUNCTION (AI Jawab Dene Ke Baad Mic On Karega) ---
-function speak(text) {
-    const speech = new SpeechSynthesisUtterance(text);
-    speech.lang = "en-IN";
-
-    // Jab AI bolna shuru kare, mic band kar do taki wo khud ko na sune
-    recognition.stop();
-
-    speech.onend = () => {
-        // Jab AI bolna khatam kar le, tab mic dobara auto-start ho jaye
-        console.log("AI finished. Restarting mic for next command...");
-        recognition.start();
-        output.innerText = "Listening again...";
-    };
-
-    window.speechSynthesis.speak(speech);
-}*/
 
 // ==============================
 // GEMINI API (AI BRAIN)
@@ -215,12 +164,12 @@ async function handleCommand(cmd) {
         window.open("https://www.google.com", "_blank");
     }
 
- /*   else if (cmd.includes("search for")) {
+    else if (cmd.includes("search for")) {
         let searchTerm = cmd.replace("search for", "").trim();
         window.open(`https://google.com/search?q=${searchTerm}`, "_blank");
         speak("Searching Google for " + searchTerm);
         return;
-    }  */
+    }  
 
     // 2. Agar upar wala koi command nahi match hota, tab Gemini se pucho
     else {
