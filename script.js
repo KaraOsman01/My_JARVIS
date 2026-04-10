@@ -20,13 +20,13 @@ micBtn.addEventListener("click", () => {
 });
 
 // RESULT
-recognition.onresult = async (event) => {
+/*recognition.onresult = async (event) => {
     const command = event.results[0][0].transcript.toLowerCase();
 
     output.innerText = "You: " + command;
 
     await handleCommand(command.toLowerCase());
-};
+};*/
 
 // AUTO RESTART
 recognition.onend = () => {
@@ -143,7 +143,7 @@ async function handleCommand(cmd) {
         window.open("https://www.google.com", "_blank");
        // openWithDelay("https://www.google.com", "Opening Google search, Sir.");
     }
-     else if (command.includes("open snapchat")) {
+     else if (cmd.includes("open snapchat")) {
           speak("Opening SnapChat, sir");
           window.open("https://www.snapchat.com", "_blank");
       }
@@ -154,7 +154,7 @@ async function handleCommand(cmd) {
         window.open(`https://google.com/search?q=${searchTerm}`, "_blank");
         speak("Searching Google for " + searchTerm);
         return;*/
-        let searchTerm = comd.replace("search for", "").trim();
+        let searchTerm = cmd.replace("search for", "").trim();
 speak("Searching Google for " + searchTerm);
 setTimeout(() => {
 window.open(`https://google.com/search?q=${searchTerm}`, "_blank");
