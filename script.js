@@ -256,9 +256,20 @@ function speak(text) {
    // recognition.stop();
 
     speech.onend = () => {
-        setTimeout(() => {
+       /* setTimeout(() => {
             try { recognition.start(); } catch(e) {}
-        }, 500);
+        }, 500);*/
+
+        updateVisualCoreState('idle');
+    setTimeout(() => {
+        try { 
+            recognition.start(); 
+            console.log("Mic auto-restarted after speaking.");
+        } catch(e) {
+            console.log("Mic restart skipped: Already active.");
+        }
+    }, 500);"
+
     };
 
     window.speechSynthesis.speak(speech);
