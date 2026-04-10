@@ -17,7 +17,8 @@ recognition.interimResults = false;
 
 // --- START LISTENING ---
 micBtn.addEventListener("click", () => {
-    recognition.start();
+    //recognition.start();
+    startListeningSafely();
     output.innerText = "Listening...";
 });
 
@@ -201,7 +202,7 @@ async function handleCommand(cmd) {
         let searchTerm = command.replace("search for", "").trim();
 speak("Searching Google for " + searchTerm);
 setTimeout(() => {
-window.open(https://google.com/search?q=${searchTerm}, "_blank");
+window.open(`https://google.com/search?q=${searchTerm}`, "_blank");
 }, 1500);
     }  
 
@@ -247,9 +248,9 @@ recognition.onstart = () => {
     updateVisualCoreState('listening'); // Change to listening waves
 };
 
-recognition.onend = () => {
+/*recognition.onend = () => {
     console.log("🛑 Stopped listening - Sync standby.");
-};
+};*/
 
 
 // ==============================
@@ -259,6 +260,8 @@ function speak(text) {
 
        window.speechSynthesis.cancel()
 
+      isJarvisSpeaking = true;
+    
     output.innerText = "JARVIS: " + text; 
     
     const speech = new SpeechSynthesisUtterance(text);
