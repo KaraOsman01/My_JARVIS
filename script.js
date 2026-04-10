@@ -236,7 +236,7 @@ window.open(`https://google.com/search?q=${searchTerm}`, "_blank");
     }
 }
 
-window.onfocus = () => {
+/*window.onfocus = () => {
     console.log("Tab active again — resetting mic");
 
     isJarvisSpeaking = false;
@@ -244,7 +244,7 @@ window.onfocus = () => {
     setTimeout(() => {
         resetMic();
     }, 500);
-};
+};*/
 //test code 01
 
 // Function to update the visual state of the neural core
