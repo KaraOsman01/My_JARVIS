@@ -82,7 +82,7 @@ function resetMic() {
 document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "visible") {
         console.log("User returned — restarting mic");
-        recognition.start();
+        resetMic();
     }
 });
 
