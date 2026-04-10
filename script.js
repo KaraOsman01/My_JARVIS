@@ -27,7 +27,7 @@ function startListeningSafely() {
     // Only restart if not already speaking and mic is off
     if (!isJarvisSpeaking) {
         try {
-            recognition.start();
+            resetMic();
             console.log("System listening for wake word...");
         } catch (e) {
             // Already started, ignore error
@@ -63,6 +63,27 @@ recognition.onend = () => {
     }, 300);
 };
 
+function resetMic() {
+    try {
+        recognition.abort(); // hard reset
+    } catch (e) {}
+
+    setTimeout(() => {
+        try {
+            resetMic();
+            console.log("Mic restarted forcefully");
+        } catch (e) {
+            console.log("Restart failed:", e);
+        }
+    }, 300);
+}
+
+document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+        console.log("User returned — restarting mic");
+        resetMic();
+    }
+});
 
 // ==============================
 // GEMINI API (AI BRAIN)
@@ -215,9 +236,13 @@ window.open(`https://google.com/search?q=${searchTerm}`, "_blank");
 }
 
 window.onfocus = () => {
-    console.log("Tab focused again. Resetting JARVIS...");
-    isJarvisSpeaking = false; // Flag phir se set karein
-    startListeningSafely();    // Mic phir se shuru karein
+    console.log("Tab active again — resetting mic");
+
+    isJarvisSpeaking = false;
+
+    setTimeout(() => {
+        resetMic();
+    }, 500);
 };
 //test code 01
 
