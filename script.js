@@ -2,6 +2,10 @@
 // JARVIS VOICE ASSISTANT CORE
 // ==============================
 let chatHistory = []; 
+
+let isJarvisActive = false; 
+let sessionTimeout;
+
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = new SpeechRecognition();
 
@@ -47,14 +51,50 @@ recognition.onresult = async (event) => {
     const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();
     console.log("Heard:", transcript);
 
-   if (transcript.includes("jarvis")) {
+ /*  if (transcript.includes("jarvis")) {
         let cleanCommand = transcript.split("jarvis").pop().trim();
         if (cleanCommand) {
             await handleCommand(cleanCommand);
         } else {
             speak("Yes Sir, I am listening.");
         }
+    }*/
+
+     // STEP 1: Pehle check karo "Jarvis" bola gaya hai?
+    if (transcript.includes("jarvis")) {
+        isJarvisActive = true;
+        
+        // Timer reset karein (agar 30 seconds tak kuch na bola toh Jarvis so jayega)
+        clearTimeout(sessionTimeout);
+        sessionTimeout = setTimeout(() => {
+            isJarvisActive = false;
+            console.log("Jarvis went to sleep...");
+        }, 30000); 
+
+        let cleanCommand = transcript.split("jarvis").pop().trim();
+        
+        if (cleanCommand) {
+            await handleCommand(cleanCommand);
+        } else {
+            speak("Yes Sir, I am listening.");
+        }
+    } 
+    // STEP 2: Agar Jarvis pehle se active hai, toh bina naam liye kaam karo
+    else if (isJarvisActive) {
+        // Timer refresh karein har baar jab aap baat karein
+        clearTimeout(sessionTimeout);
+        sessionTimeout = setTimeout(() => {
+            isJarvisActive = false;
+        }, 30000);
+
+        await handleCommand(transcript);
     }
+    // STEP 3: Agar Jarvis so raha hai aur aapne naam nahi liya
+    else {
+        console.log("Jarvis is sleeping. Say 'Jarvis' to wake him up.");
+    }
+};
+    
 };
 
 
