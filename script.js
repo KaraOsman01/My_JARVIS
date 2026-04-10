@@ -22,7 +22,7 @@ micBtn.addEventListener("click", () => {
 });
 
 // 2. Controlled Restart Function
-/*function startListeningSafely() {
+function startListeningSafely() {
     // Only restart if not already speaking and mic is off
     if (!isJarvisSpeaking) {
         try {
@@ -32,7 +32,7 @@ micBtn.addEventListener("click", () => {
             // Already started, ignore error
         }
     }
-}*/
+}
 
 
 // 3. Result Handler
@@ -40,14 +40,14 @@ recognition.onresult = async (event) => {
     const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();
     console.log("Heard:", transcript);
 
-   /* if (transcript.includes("jarvis")) {
+   if (transcript.includes("jarvis")) {
         let cleanCommand = transcript.split("jarvis").pop().trim();
         if (cleanCommand) {
             await handleCommand(cleanCommand);
         } else {
             speak("Yes Sir, I am listening.");
         }
-    }*/
+    }
 };
 
 // 4. Loop Prevention on End
