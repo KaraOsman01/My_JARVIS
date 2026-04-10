@@ -23,15 +23,6 @@ micBtn.addEventListener("click", () => {
     }
 });
 
-// RESULT
-/*recognition.onresult = async (event) => {
-    const command = event.results[0][0].transcript.toLowerCase();
-
-    output.innerText = "You: " + command;
-
-    await handleCommand(command.toLowerCase());
-};*/
-
 // AUTO RESTART
 recognition.onend = () => {
     console.log("Restarting mic...");
@@ -51,14 +42,6 @@ recognition.onresult = async (event) => {
     const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();
     console.log("Heard:", transcript);
 
- /*  if (transcript.includes("jarvis")) {
-        let cleanCommand = transcript.split("jarvis").pop().trim();
-        if (cleanCommand) {
-            await handleCommand(cleanCommand);
-        } else {
-            speak("Yes Sir, I am listening.");
-        }
-    }*/
 
      // STEP 1: Pehle check karo "Jarvis" bola gaya hai?
     if (transcript.includes("jarvis")) {
@@ -152,34 +135,23 @@ async function askGemini(prompt) {
 async function handleCommand(cmd) {
     //const command = cmd.toLowerCase();
 
-     // Ek generic function banayein jo link kholne se pehle Jarvis ko bolne de
-      const openWithDelay = (url, msg) => {
-       speak(msg); // Pehle Jarvis bolega
-        setTimeout(() => {
-          window.open(url, "_blank");
-           }, 1500); // 1.5 second ka gap taaki awaaz poori ho jaye
-        };
     
     // 1. Social Media & Apps (Action First)
     if (cmd.includes("open youtube")) {
         speak("Opening YouTube, Sir.");
         window.open("https://www.youtube.com", "_blank");
-        //openWithDelay("https://www.youtube.com", "Opening YouTube, Sir.");
     } 
     else if (cmd.includes("open facebook")) {
         speak("Opening Facebook for you, Sir.");
         window.open("https://www.facebook.com", "_blank");
-        //openWithDelay("https://www.facebook.com", "Opening Facebook for you, Sir.");
     } 
     else if (cmd.includes("open instagram")) {
        speak("Right away Sir, opening Instagram.");
         window.open("https://www.instagram.com", "_blank");
-        //openWithDelay("https://www.instagram.com", "Right away Sir, opening Instagram.", "_blank");
     }
     else if (cmd.includes("open google")) {
         speak("Opening Google search, Sir.");
         window.open("https://www.google.com", "_blank");
-       // openWithDelay("https://www.google.com", "Opening Google search, Sir.");
     }
      else if (cmd.includes("open snapchat")) {
           speak("Opening SnapChat, sir");
@@ -188,16 +160,13 @@ async function handleCommand(cmd) {
     
 
     else if (cmd.includes("search for")) {
-       /* let searchTerm = cmd.replace("search for", "").trim();
-        window.open(`https://google.com/search?q=${searchTerm}`, "_blank");
-        speak("Searching Google for " + searchTerm);
-        return;*/
+       
         let searchTerm = cmd.replace("search for", "").trim();
-speak("Searching Google for " + searchTerm);
-setTimeout(() => {
-window.open(`https://google.com/search?q=${searchTerm}`, "_blank");
-}, 1500);
-    }  
+         speak("Searching Google for " + searchTerm);
+         setTimeout(() => {
+        window.open(`https://google.com/search?q=${searchTerm}`, "_blank");
+         }, 1500);
+      }  
 
     // 2. Agar upar wala koi command nahi match hota, tab Gemini se pucho
     else {
@@ -256,9 +225,6 @@ function speak(text) {
    // recognition.stop();
 
     speech.onend = () => {
-       /* setTimeout(() => {
-            try { recognition.start(); } catch(e) {}
-        }, 500);*/
 
         updateVisualCoreState('idle');
     setTimeout(() => {
@@ -292,17 +258,16 @@ window.onfocus = () => {
     }
 };
 
-/*// Error handling ko thoda aur mazboot karein
-recognition.onerror = (event) => {
-    console.error("Speech Recognition Error:", event.error);
-    if (event.error === 'not-allowed') {
-        output.innerText = "Error: Mic permission denied.";
-    }
-    // Agar mic crash ho jaye, toh 1 second baad restart karein
-    setTimeout(() => {
-        try { recognition.start(); } catch(e) {}
-    }, 1000);
-};*/
+// Save history before refresh
+window.onbeforeunload = () => {
+    localStorage.setItem("jarvis_memory", JSON.stringify(chatHistory));
+};
+
+// Load history on startup
+window.onload = () => {
+    const saved = localStorage.getItem("jarvis_memory");
+    if (saved) chatHistory = JSON.parse(saved);
+};
 
 function resetMicSystem() {
     console.log("Re-initializing Mic Engine...");
