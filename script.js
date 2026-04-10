@@ -221,7 +221,7 @@ function speak(text) {
     speech.lang = "en-IN";
     updateVisualCoreState('speaking', "JARVIS: " + text);
 
-    recognition.stop();
+   // recognition.stop();
 
     speech.onend = () => {
         setTimeout(() => {
