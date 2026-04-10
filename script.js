@@ -138,7 +138,7 @@ async function askGemini(prompt) {
 // ==============================
 // COMMAND HANDLER
 // ==============================
-async function handleCommand(cmd) {
+/*async function handleCommand(cmd) {
     const apps = {
         "whatsapp": "https://whatsapp.com",
         "youtube": "https://youtube.com",
@@ -170,9 +170,9 @@ async function handleCommand(cmd) {
     output.innerText = "Jarvis is thinking...";
     const reply = await askGemini(cmd);
     speak(reply);
-}
+}*/
 
-/*async function handleCommand(cmd) {
+async function handleCommand(cmd) {
     //const command = cmd.toLowerCase();
 
      // Ek generic function banayein jo link kholne se pehle Jarvis ko bolne de
@@ -186,12 +186,12 @@ async function handleCommand(cmd) {
     // 1. Social Media & Apps (Action First)
     if (cmd.includes("open youtube")) {
         /*speak("Opening YouTube, Sir.");
-        window.open("https://www.youtube.com", "_blank");
+        window.open("https://www.youtube.com", "_blank");*/
         openWithDelay("https://www.youtube.com", "Opening YouTube, Sir.");
     } 
     else if (cmd.includes("open facebook")) {
         /*speak("Opening Facebook for you, Sir.");
-        window.open("https://www.facebook.com", "_blank");
+        window.open("https://www.facebook.com", "_blank");*/
         openWithDelay("https://www.facebook.com", "Opening Facebook for you, Sir.");
     } 
     else if (cmd.includes("open instagram")) {
@@ -201,7 +201,7 @@ async function handleCommand(cmd) {
     }
     else if (cmd.includes("open google")) {
        /* speak("Opening Google search, Sir.");
-        window.open("https://www.google.com", "_blank");
+        window.open("https://www.google.com", "_blank");*/
         openWithDelay("https://www.google.com", "Opening Google search, Sir.");
     }
      else if (command.includes("open snapchat")) {
@@ -220,7 +220,7 @@ async function handleCommand(cmd) {
        /* let searchTerm = cmd.replace("search for", "").trim();
         window.open(`https://google.com/search?q=${searchTerm}`, "_blank");
         speak("Searching Google for " + searchTerm);
-        return;
+        return;*/
         let searchTerm = command.replace("search for", "").trim();
 speak("Searching Google for " + searchTerm);
 setTimeout(() => {
@@ -234,7 +234,7 @@ window.open(`https://google.com/search?q=${searchTerm}`, "_blank");
         const reply = await askGemini(cmd);
         speak(reply);
     }
-}*/
+}
 
 window.onfocus = () => {
     console.log("Tab active again — resetting mic");
