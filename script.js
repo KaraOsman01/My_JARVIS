@@ -203,10 +203,6 @@ function updateVisualCoreState(state, text = "") {
     } 
     else {
         output.innerText = "System Status: Core Idle.";
-        recognition.start();
-        setTimeout(() => {
-            try { recognition.start(); } catch(e) {} 
-        }, 1000);  
     }
 }
 
@@ -243,16 +239,16 @@ function speak(text) {
 
     // Bolne ke baad mic standby mode pe jayega
     speech.onend = () => {
-
+isJarvisSpeaking = false;
+    
         console.log("Jarvis finished speaking.");
+        
+        updateVisualCoreState('idle'); 
 
         recognition.start();
         
-        updateVisualCoreState('idle'); 
-        
         setTimeout(() => {
-            try { recognition.start(); } catch(e) {} 
-        }, 1000);  
+            try { recognition.start(); } , 1000);  
     };
 
     window.speechSynthesis.speak(speech);
