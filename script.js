@@ -37,6 +37,10 @@ function startListeningSafely() {
 
 // 3. Result Handler
 recognition.onresult = async (event) => {
+
+      // Check if result is defined
+    if (!event.results) return;
+    
     const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();
     console.log("Heard:", transcript);
 
@@ -146,6 +150,7 @@ async function askGemini(prompt) {
 }*/
 
 async function handleCommand(cmd) {
+    const command = cmd.toLowerCase();
     // 1. Social Media & Apps (Action First)
     if (cmd.includes("open youtube")) {
         speak("Opening YouTube, Sir.");
@@ -164,7 +169,11 @@ async function handleCommand(cmd) {
         window.open("https://www.google.com", "_blank");
     }
      else if (command.includes("open snapchat")) {
-    openAppByPackage("com.snapchat.android", "Snapchat", "_blank");
+    // App opening logic
+        const packageName = "com.snapchat.android";
+        const intentUrl = `intent://#Intent;package=${packageName};S.browser_fallback_url=https://google.com{packageName};end`;
+        speak("Opening Snapchat, Sir.");
+        window.location.href = intentUrl;
       }
     
 
@@ -240,16 +249,18 @@ function speak(text) {
     // Bolne ke baad mic standby mode pe jayega
     speech.onend = () => {
 isJarvisSpeaking = false;
-    
-        console.log("Jarvis finished speaking.");
-        
-        updateVisualCoreState('idle'); 
+    console.log("Jarvis finished speaking.");
+    updateVisualCoreState('idle'); 
 
-        recognition.start();
-        
-        setTimeout(() => {
-            try { recognition.start(); } , 1000);  
-    };
+    // Corrected Timeout Syntax
+    setTimeout(() => {
+        try { 
+            startListeningSafely(); 
+        } catch(e) {
+            console.log("Restart error:", e);
+        }
+    }, 1000); 
+};
 
     window.speechSynthesis.speak(speech);
 }
