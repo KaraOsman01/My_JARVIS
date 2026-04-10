@@ -265,14 +265,6 @@ recognition.onend = () => {
 };
 
 
-recognition.onerror = (event) => {
-    console.error("Speech error:", event.error);
-    if (event.error === 'no-speech') {
-        // No speech detected, just restart quietly
-        recognition.stop(); 
-    }
-};
-
 // ==============================
 // CUSTOM SMART SPEAK
 // ==============================
