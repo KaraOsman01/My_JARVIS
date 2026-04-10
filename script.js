@@ -2,39 +2,40 @@
 // JARVIS VOICE ASSISTANT CORE
 // ==============================
 let chatHistory = []; 
-const output = document.getElementById("output");
-const micBtn = document.getElementById("micBtn");
-
-let isJarvisSpeaking = false; // Flag to track if AI is talking
-
-
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = new SpeechRecognition();
+
 recognition.lang = "en-IN";
+recognition.continuous = false;
+recognition.interimResults = false;
 
-recognition.continuous = false; // Keep false to process discrete chunks (more stable for wake words)
-recognition.interimResults = true;
-
-// --- START LISTENING ---
+// MIC CLICK
 micBtn.addEventListener("click", () => {
-    //recognition.start();
-    startListeningSafely();
-    output.innerText = "Listening...";
+    try {
+        recognition.start();
+        output.innerText = "Listening...";
+    } catch(e) {
+        console.log("Mic already active");
+    }
 });
 
-2. Controlled Restart Function
-function startListeningSafely() {
-    // Only restart if not already speaking and mic is off
-    if (!isJarvisSpeaking) {
-        try {
-            recognition.start();
-            //resetMic();
-            console.log("System listening for wake word...");
-        } catch (e) {
-            // Already started, ignore error
-        }
-    }
-}
+// RESULT
+recognition.onresult = async (event) => {
+    const command = event.results[0][0].transcript.toLowerCase();
+
+    output.innerText = "You: " + command;
+
+    await handleCommand(command);
+};
+
+// AUTO RESTART
+recognition.onend = () => {
+    console.log("Restarting mic...");
+    try {
+        recognition.start();
+    } catch(e) {}
+};
+ 
 
 
 // 3. Result Handler
@@ -46,45 +47,16 @@ recognition.onresult = async (event) => {
     const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();
     console.log("Heard:", transcript);
 
-   if (transcript.includes("jarvis")) {
+  /* if (transcript.includes("jarvis")) {
         let cleanCommand = transcript.split("jarvis").pop().trim();
         if (cleanCommand) {
             await handleCommand(cleanCommand);
         } else {
             speak("Yes Sir, I am listening.");
         }
-    }
+    }*/
 };
 
-//4. Loop Prevention on End
-recognition.onend = () => {
-    // Rapid looping prevent karne ke liye 300ms ka gap
-    setTimeout(() => {
-        startListeningSafely();
-    }, 300);
-};
-
-function resetMic() {
-    try {
-        recognition.abort(); // hard reset
-    } catch (e) {}
-
-    setTimeout(() => {
-        try {
-            resetMic();
-            console.log("Mic restarted forcefully");
-        } catch (e) {
-            console.log("Restart failed:", e);
-        }
-    }, 300);
-}
-
-document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "visible") {
-        console.log("User returned — restarting mic");
-        resetMic();
-    }
-});
 
 // ==============================
 // GEMINI API (AI BRAIN)
@@ -138,42 +110,9 @@ async function askGemini(prompt) {
 // ==============================
 // COMMAND HANDLER
 // ==============================
-/*async function handleCommand(cmd) {
-    const apps = {
-        "whatsapp": "https://whatsapp.com",
-        "youtube": "https://youtube.com",
-        "instagram": "https://instagram.com",
-        "facebook": "https://facebook.com",
-        "google": "https://google.com"
-    };
-
-    // 1. INSTANT CHECK: Agar 'open' word hai, toh bina kisi wait ke turant open karo
-    if (cmd.startsWith("JARVIS open ")) {
-        let appName = cmd.replace("open ", "").trim();
-        
-        if (apps[appName]) {
-            window.open(apps[appName], "_blank"); // Pehle window kholo (Instant)
-            speak(`Opening ${appName}`);           // Saath mein bolo
-            return; 
-        }
-    } 
-
-    // 2. Search Logic (Instant)
-    if (cmd.includes("search for")) {
-        let searchTerm = cmd.replace("search for", "").trim();
-        window.open(`https://google.com/search?q=${searchTerm}`, "_blank");
-        speak("Searching Google for " + searchTerm);
-        return;
-    }
-
-    // 3. AI Brain (Sirf tab chalega jab upar ka kuch match nahi hoga)
-    output.innerText = "Jarvis is thinking...";
-    const reply = await askGemini(cmd);
-    speak(reply);
-}*/
 
 async function handleCommand(cmd) {
-    //const command = cmd.toLowerCase();
+    const command = cmd.toLowerCase();
 
      // Ek generic function banayein jo link kholne se pehle Jarvis ko bolne de
       const openWithDelay = (url, msg) => {
@@ -221,7 +160,7 @@ async function handleCommand(cmd) {
         window.open(`https://google.com/search?q=${searchTerm}`, "_blank");
         speak("Searching Google for " + searchTerm);
         return;*/
-        let searchTerm = command.replace("search for", "").trim();
+        let searchTerm = comd.replace("search for", "").trim();
 speak("Searching Google for " + searchTerm);
 setTimeout(() => {
 window.open(`https://google.com/search?q=${searchTerm}`, "_blank");
@@ -236,15 +175,6 @@ window.open(`https://google.com/search?q=${searchTerm}`, "_blank");
     }
 }
 
-/*window.onfocus = () => {
-    console.log("Tab active again — resetting mic");
-
-    isJarvisSpeaking = false;
-
-    setTimeout(() => {
-        resetMic();
-    }, 500);
-};*/
 //test code 01
 
 // Function to update the visual state of the neural core
@@ -274,54 +204,29 @@ recognition.onstart = () => {
     updateVisualCoreState('listening'); // Change to listening waves
 };
 
-/*recognition.onend = () => {
+recognition.onend = () => {
     console.log("🛑 Stopped listening - Sync standby.");
-};*/
-
-/*recognition.onend = () => {
-    console.log("Restarting mic...");
-    try { recognition.start(); } catch(e) {}
-};*/
+};
 
 // ==============================
 // CUSTOM SMART SPEAK
 // ==============================
 function speak(text) {
 
-       window.speechSynthesis.cancel()
+    window.speechSynthesis.cancel();
 
-      //isJarvisSpeaking = true;
-    
-    output.innerText = "JARVIS: " + text; 
-    
+    output.innerText = "JARVIS: " + text;
+
     const speech = new SpeechSynthesisUtterance(text);
-    speech.lang = "en-IN"; // Set to Indian accent for Hinglish
+    speech.lang = "en-IN";
 
-     recognition.stop();
+    recognition.stop();
 
-    
-    // Peak reaction when speaking
-    updateVisualCoreState('speaking', "JARVIS: " + text);
- // Change to speaking waves
-
-    // Bolne ke baad mic standby mode pe jayega
     speech.onend = () => {
-//isJarvisSpeaking = false;
-    console.log("Jarvis finished speaking.");
-    updateVisualCoreState('idle'); 
-
-    // Corrected Timeout Syntax
-  /*  setTimeout(() => {
-        try { 
-            startListeningSafely(); 
-        } catch(e) {
-            console.log("Restart error:", e);
-        }
-    }, 1000); */
         setTimeout(() => {
-            try { recognition.start(); } catch(e) {} 
-        }, 500);  
-};
+            try { recognition.start(); } catch(e) {}
+        }, 500);
+    };
 
     window.speechSynthesis.speak(speech);
 }
