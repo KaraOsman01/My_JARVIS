@@ -27,7 +27,8 @@ function startListeningSafely() {
     // Only restart if not already speaking and mic is off
     if (!isJarvisSpeaking) {
         try {
-            resetMic();
+            recognition.start();
+            //resetMic();
             console.log("System listening for wake word...");
         } catch (e) {
             // Already started, ignore error
