@@ -272,7 +272,7 @@ recognition.onend = () => {
         }
     }
 };
-};
+
 
 recognition.onerror = (event) => {
     console.error("Speech error:", event.error);
