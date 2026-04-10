@@ -18,11 +18,11 @@ recognition.interimResults = false;
 // --- START LISTENING ---
 micBtn.addEventListener("click", () => {
     recognition.start();
-    startListeningSafely();
+    //startListeningSafely();
     output.innerText = "Listening...";
 });
 
-// 2. Controlled Restart Function
+/*2. Controlled Restart Function
 function startListeningSafely() {
     // Only restart if not already speaking and mic is off
     if (!isJarvisSpeaking) {
@@ -34,7 +34,7 @@ function startListeningSafely() {
             // Already started, ignore error
         }
     }
-}
+}*/
 
 
 // 3. Result Handler
@@ -56,13 +56,13 @@ recognition.onresult = async (event) => {
     }
 };
 
-// 4. Loop Prevention on End
+/*4. Loop Prevention on End
 recognition.onend = () => {
     // Rapid looping prevent karne ke liye 300ms ka gap
     setTimeout(() => {
         startListeningSafely();
     }, 300);
-};
+};*/
 
 function resetMic() {
     try {
@@ -185,14 +185,14 @@ async function handleCommand(cmd) {
     
     // 1. Social Media & Apps (Action First)
     if (cmd.includes("open youtube")) {
-        /*speak("Opening YouTube, Sir.");
-        window.open("https://www.youtube.com", "_blank");*/
-        openWithDelay("https://www.youtube.com", "Opening YouTube, Sir.");
+        speak("Opening YouTube, Sir.");
+        window.open("https://www.youtube.com", "_blank");
+        //openWithDelay("https://www.youtube.com", "Opening YouTube, Sir.");
     } 
     else if (cmd.includes("open facebook")) {
-        /*speak("Opening Facebook for you, Sir.");
-        window.open("https://www.facebook.com", "_blank");*/
-        openWithDelay("https://www.facebook.com", "Opening Facebook for you, Sir.");
+        speak("Opening Facebook for you, Sir.");
+        window.open("https://www.facebook.com", "_blank");
+        //openWithDelay("https://www.facebook.com", "Opening Facebook for you, Sir.");
     } 
     else if (cmd.includes("open instagram")) {
        speak("Right away Sir, opening Instagram.");
@@ -200,9 +200,9 @@ async function handleCommand(cmd) {
         //openWithDelay("https://www.instagram.com", "Right away Sir, opening Instagram.", "_blank");
     }
     else if (cmd.includes("open google")) {
-       /* speak("Opening Google search, Sir.");
-        window.open("https://www.google.com", "_blank");*/
-        openWithDelay("https://www.google.com", "Opening Google search, Sir.");
+        speak("Opening Google search, Sir.");
+        window.open("https://www.google.com", "_blank");
+       // openWithDelay("https://www.google.com", "Opening Google search, Sir.");
     }
      else if (command.includes("open snapchat")) {
     // App opening logic
@@ -278,6 +278,10 @@ recognition.onstart = () => {
     console.log("🛑 Stopped listening - Sync standby.");
 };*/
 
+recognition.onend = () => {
+    console.log("Restarting mic...");
+    try { recognition.start(); } catch(e) {}
+};
 
 // ==============================
 // CUSTOM SMART SPEAK
@@ -286,7 +290,7 @@ function speak(text) {
 
        window.speechSynthesis.cancel()
 
-      isJarvisSpeaking = true;
+      //isJarvisSpeaking = true;
     
     output.innerText = "JARVIS: " + text; 
     
@@ -302,18 +306,21 @@ function speak(text) {
 
     // Bolne ke baad mic standby mode pe jayega
     speech.onend = () => {
-isJarvisSpeaking = false;
+//isJarvisSpeaking = false;
     console.log("Jarvis finished speaking.");
     updateVisualCoreState('idle'); 
 
     // Corrected Timeout Syntax
-    setTimeout(() => {
+  /*  setTimeout(() => {
         try { 
             startListeningSafely(); 
         } catch(e) {
             console.log("Restart error:", e);
         }
-    }, 1000); 
+    }, 1000); */
+        setTimeout(() => {
+            try { recognition.start(); } catch(e) {} 
+        }, 500);  
 };
 
     window.speechSynthesis.speak(speech);
