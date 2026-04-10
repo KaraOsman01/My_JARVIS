@@ -203,6 +203,10 @@ function updateVisualCoreState(state, text = "") {
     } 
     else {
         output.innerText = "System Status: Core Idle.";
+        recognition.start();
+        setTimeout(() => {
+            try { recognition.start(); } catch(e) {} 
+        }, 1000);  
     }
 }
 
