@@ -12,7 +12,7 @@ const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecogni
 const recognition = new SpeechRecognition();
 recognition.lang = "en-IN";
 
-recognition.continuous = true; // Keep false to process discrete chunks (more stable for wake words)
+recognition.continuous = false; // Keep false to process discrete chunks (more stable for wake words)
 recognition.interimResults = false;
 
 // --- START LISTENING ---
