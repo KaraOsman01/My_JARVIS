@@ -259,7 +259,7 @@ function speak(text) {
     updateVisualCoreState('speaking', "JARVIS: " + text);
 
     // 4. Jab tak Jarvis bol raha ho, mic ko band rakhein
-    try { recognition.stop(); } catch(e) {}
+   // try { recognition.stop(); } catch(e) {}
 
     speech.onend = () => {
         updateVisuals('idle');
