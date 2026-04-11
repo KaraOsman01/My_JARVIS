@@ -247,7 +247,7 @@ if (command.includes("clear my list") || command.includes("delete all tasks")) {
 
 // SHUTDOWN / OFFLINE COMMAND
 if (command.includes("shutdown") || command.includes("go offline") || command.includes("band ho jao") || command.includes("offline ho jao")) {
-    speak("Understood Sir. Shutting down all core systems. Systems offline process initiated 3, 2, 1, Goodbye sir.");
+    speak("Understood Sir. Shutting down all core systems. I initiated the process sir 3 2 1. shutdown completed");
     
     // Sabse zaroori: Mic ko hamesha ke liye band karna
     recognition.onend = null; // Taaki wo auto-restart na ho
