@@ -327,6 +327,16 @@ window.onbeforeunload = () => {
 window.onload = () => {
     const saved = localStorage.getItem("jarvis_memory");
     if (saved) chatHistory = JSON.parse(saved);
+    
+    // Welcome Message based on time
+    const hours = new Date().getHours();
+    let greeting = "Good Evening Sir";
+    if (hours < 12) greeting = "Good Morning Sir";
+    else if (hours < 17) greeting = "Good Afternoon Sir";
+
+    setTimeout(() => {
+        speak(`${greeting}. Systems are online. All core functions are operational.`);
+    }, 1000);
 };
 
 function resetMicSystem() {
