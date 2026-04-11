@@ -1,6 +1,13 @@
 // ==============================
 // JARVIS VOICE ASSISTANT CORE
 // ==============================
+
+// Voices ko pre-load karne ke liye
+window.speechSynthesis.onvoiceschanged = () => {
+    const voices = window.speechSynthesis.getVoices();
+    console.log("Voices loaded:", voices);
+};
+
 let chatHistory = []; 
 
 let isJarvisActive = false; 
@@ -206,7 +213,7 @@ recognition.onend = () => {
 // CUSTOM SMART SPEAK
 // ==============================
 
-function speak(text) {
+/*function speak(text) {
     // 1. Purani saari awaazein turant khatam karo (Queue clear)
     window.speechSynthesis.cancel(); 
 
@@ -237,6 +244,41 @@ function speak(text) {
     };
 
     // 5. Execution (Foran bolne ke liye)
+    window.speechSynthesis.speak(speech);
+}*/
+
+function speak(text) {
+    window.speechSynthesis.cancel(); 
+
+    const speech = new SpeechSynthesisUtterance(text);
+    
+    // Sab voices ki list nikaalein
+    const voices = window.speechSynthesis.getVoices();
+
+    // Kisi Male voice ko dhoondhein (e.g., Google UK English Male ya Microsoft David)
+    // 'Google US English' aksar male hoti hai ya phir specific 'male' keyword dhoondhein
+    const maleVoice = voices.find(voice => 
+        voice.name.includes('Male') || 
+        voice.name.includes('David') || 
+        voice.name.includes('Google US English')
+    );
+
+    if (maleVoice) {
+        speech.voice = maleVoice;
+    }
+
+    speech.lang = "en-IN";
+    speech.rate = 0.9; // Thoda slow taaki bhari lage awaaz
+    speech.pitch = 0.8; // Pitch kam karne se awaaz "Aadmi" jaisi bhari ho jati hai
+
+    updateVisualCoreState('speaking', "JARVIS: " + text);
+
+    speech.onend = () => {
+        setTimeout(() => {
+            try { recognition.start(); } catch(e) {}
+        }, 500);
+    };
+
     window.speechSynthesis.speak(speech);
 }
 
