@@ -367,7 +367,7 @@ window.onload = () => {
     // 1.5 second ka delay taaki page load feel ho
     setTimeout(() => {
         speak(randomGreet);
-    }, 1500);
+    }, 500);
 
     
     // Welcome Message based on time
@@ -378,7 +378,7 @@ window.onload = () => {
 
     setTimeout(() => {
         speak(`${greeting}. Sir, Systems are online. All core functions are operational. I have updated the weather and news. Current battery is being monitored. I am ready when you are.`);
-    }, 1000);
+    }, 100);
 };
 
 function resetMicSystem() {
