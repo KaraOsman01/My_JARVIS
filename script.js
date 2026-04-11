@@ -106,6 +106,7 @@ recognition.onresult = async (event) => {
         
         // Popup dikhao
         alertBox.style.display = "block";
+        speak("Please say Jarvis to start the conversation."); 
         
         // 3 second baad popup khud gayab ho jaye
         setTimeout(() => {
@@ -113,7 +114,6 @@ recognition.onresult = async (event) => {
         }, 3000);
 
         // Chaho toh Jarvis bol kar bhi mana kar sakta hai
-        // speak("Please say Jarvis to start the conversation."); 
     }
 };
 
