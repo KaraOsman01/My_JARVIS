@@ -147,18 +147,34 @@ async function handleCommand(cmd) {
 
     // 1. WEATHER COMMAND
     if (command.includes("weather") || command.includes("mausam")) {
-        try {
-            const res = await fetch("/api/weather"); // Humne apna alag rasta banaya
-            const data = await res.json();
+    // 1. Shehar ka naam nikalne ka asaan tarika
+    // Hum "in" ya "ka" ke baad wala word pakadne ki koshish karenge
+    let words = command.split(" ");
+    let city = "Srinagar"; // Default
+
+    if (words.includes("in")) {
+        city = words[words.indexOf("in") + 1];
+    } else if (words.includes("ka")) {
+        city = words[words.indexOf("ka") - 1]; // "Delhi ka weather" -> Delhi
+    }
+
+    try {
+        // 2. Ab hum URL mein city ka naam bhej rahe hain: ?city=Delhi
+        const res = await fetch(`/api/weather?city=${city}`); 
+        const data = await res.json();
+
+        if (data.error) {
+            speak(`Sir, I couldn't find weather for ${city}.`);
+        } else {
             const temp = Math.round(data.main.temp);
             const desc = data.weather[0].description;
-            speak(`Sir, the current temperature is ${temp} degrees with ${desc}.`);
-            return; // Command mil gayi, toh aage Gemini ke paas nahi jayega
-        } catch (err) {
-            speak("Sir, weather servers are unreachable.");
-            return;
+            speak(`Sir, the temperature in ${city} is ${temp} degrees with ${desc}.`);
         }
+    } catch (err) {
+        speak("Sir, weather systems are currently unreachable.");
     }
+    return;
+}
 
     // 2. NEWS COMMAND
     if (command.includes("news") || command.includes("khabrein")) {
