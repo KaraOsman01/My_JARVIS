@@ -53,18 +53,6 @@ recognition.onresult = async (event) => {
     if (!event.results) return;
     
     const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();
-
-    // --- NAYA CODE: USER KA TEXT PRINT KAREIN ---
-    let p = document.createElement("p");
-    p.classList.add("user-msg"); // CSS class apply ki
-    p.innerText = "YOU: " + transcript;
-    output.appendChild(p); // Output box mein add karein
-    output.scrollTop = output.scrollHeight; // Auto-scroll
-    // ------------------------------------------
-
-    console.log("Captured Voice:", transcript);
-    updateVisualCoreState('speaking', "Analyzing..."); // Visual change
-    await handleCommand(transcript); // Command handle karein
     
     const alertBox = document.getElementById("wakeWordAlert");
 
@@ -353,15 +341,6 @@ function speak(text) {
     window.speechSynthesis.cancel(); 
 
     output.innerText = "JARVIS: " + text;
-
-    // 1. Output box mein Jarvis ka message style ke saath add karein
-    // Pehle purana text overwrite karne ke bajaye, naya 'p' element banate hain
-    let p = document.createElement("p");
-    p.classList.add("jarvis-msg"); // CSS class apply ki
-    p.innerText = "JARVIS: " + text;
-    
-    // Output box mein niche add karein
-    output.appendChild(p);
 
     // AUTO-SCROLL: Ye line screen ko niche le jayegi
     output.scrollTop = output.scrollHeight;
