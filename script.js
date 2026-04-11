@@ -176,30 +176,6 @@ async function handleCommand(cmd) {
     return;
 }
 
-    // 2. NEWS COMMAND
-    else if (command.includes("news") || command.includes("khabrein")) {
-    try {
-        const res = await fetch("/api/news");
-        const data = await res.json();
-
-        // Check karein ke articles mil rahe hain ya nahi
-        if (data.articles && data.articles.length > 0) {
-            // Sirf top 3 khabrein lenge aur unka title saaf karenge
-            const headlines = data.articles.slice(0, 3).map((a, i) => {
-                return `News ${i + 1}: ${a.title.split("-")[0]}`; // Newspaper ka naam hata deta hai (e.g., - Times of India)
-            }).join(". ");
-
-            speak(`Sir, here are the top headlines: ${headlines}`);
-        } else {
-            speak("Sir, I found the news network but there are no fresh headlines right now.");
-            console.log("News API Response:", data); // Check karne ke liye console dekhein
-        }
-    } catch (err) {
-        speak("Sir, I am unable to reach the news servers.");
-        console.error("News Error:", err);
-    }
-    return;
-}
     
     // 1. Social Media & Apps (Action First)
     if (cmd.includes("open youtube")) {
