@@ -143,8 +143,36 @@ async function askGemini(prompt) {
 // ==============================
 
 async function handleCommand(cmd) {
-    //const command = cmd.toLowerCase();
+    const command = cmd.toLowerCase();
 
+    // 1. WEATHER COMMAND
+    if (command.includes("weather") || command.includes("mausam")) {
+        try {
+            const res = await fetch("/api/weather"); // Humne apna alag rasta banaya
+            const data = await res.json();
+            const temp = Math.round(data.main.temp);
+            const desc = data.weather[0].description;
+            speak(`Sir, the current temperature is ${temp} degrees with ${desc}.`);
+            return; // Command mil gayi, toh aage Gemini ke paas nahi jayega
+        } catch (err) {
+            speak("Sir, weather servers are unreachable.");
+            return;
+        }
+    }
+
+    // 2. NEWS COMMAND
+    if (command.includes("news") || command.includes("khabrein")) {
+        try {
+            const res = await fetch("/api/news"); // Iska bhi apna rasta hai
+            const data = await res.json();
+            const headlines = data.articles.slice(0, 3).map(a => a.title).join(". ");
+            speak(`Sir, top headlines are: ${headlines}`);
+            return;
+        } catch (err) {
+            speak("Sir, I can't fetch the news right now.");
+            return;
+        }
+    }
     
     // 1. Social Media & Apps (Action First)
     if (cmd.includes("open youtube")) {
