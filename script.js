@@ -34,49 +34,6 @@ recognition.onend = () => {
 
 
 // 3. Result Handler
-/*recognition.onresult = async (event) => {
-
-      // Check if result is defined
-    if (!event.results) return;
-    
-    const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();
-    console.log("Heard:", transcript);
-
-
-     // STEP 1: Pehle check karo "Jarvis" bola gaya hai?
-    if (transcript.includes("jarvis")) {
-        isJarvisActive = true;
-        
-        // Timer reset karein (agar 30 seconds tak kuch na bola toh Jarvis so jayega)
-        clearTimeout(sessionTimeout);
-        sessionTimeout = setTimeout(() => {
-            isJarvisActive = false;
-            console.log("Jarvis went to sleep...");
-        }, 30000); 
-
-        let cleanCommand = transcript.split("jarvis").pop().trim();
-        
-        if (cleanCommand) {
-            await handleCommand(cleanCommand);
-        } else {
-            speak("Yes Sir, I am listening.");
-        }
-    } 
-    // STEP 2: Agar Jarvis pehle se active hai, toh bina naam liye kaam karo
-    else if (isJarvisActive) {
-        // Timer refresh karein har baar jab aap baat karein
-        clearTimeout(sessionTimeout);
-        sessionTimeout = setTimeout(() => {
-            isJarvisActive = false;
-        }, 30000);
-
-        await handleCommand(transcript);
-    }
-    // STEP 3: Agar Jarvis so raha hai aur aapne naam nahi liya
-    else {
-        console.log("Jarvis is sleeping. Say 'Jarvis' to wake him up.");
-    }
-};*/
 
 recognition.onresult = async (event) => {
     if (!event.results) return;
@@ -112,8 +69,6 @@ recognition.onresult = async (event) => {
         setTimeout(() => {
             alertBox.style.display = "none";
         }, 3000);
-
-        // Chaho toh Jarvis bol kar bhi mana kar sakta hai
     }
 };
 
@@ -250,34 +205,6 @@ recognition.onend = () => {
 // ==============================
 // CUSTOM SMART SPEAK
 // ==============================
-/*function speak(text) {
-
-    window.speechSynthesis.cancel();
-
-    output.innerText = "JARVIS: " + text;
-
-    const speech = new SpeechSynthesisUtterance(text);
-    speech.lang = "en-IN";
-    updateVisualCoreState('speaking', "JARVIS: " + text);
-
-   // recognition.stop();
-
-    speech.onend = () => {
-
-        updateVisualCoreState('idle');
-    setTimeout(() => {
-        try { 
-            recognition.start(); 
-            console.log("Mic auto-restarted after speaking.");
-        } catch(e) {
-            console.log("Mic restart skipped: Already active.");
-        }
-    }, 500);
-
-    };
-
-    window.speechSynthesis.speak(speech);
-}*/
 
 function speak(text) {
     // 1. Purani saari awaazein turant khatam karo (Queue clear)
@@ -295,9 +222,6 @@ function speak(text) {
 
     // 3. Visual core update
     updateVisualCoreState('speaking', "JARVIS: " + text);
-
-    // 4. Jab tak Jarvis bol raha ho, mic ko band rakhein
-   // try { recognition.stop(); } catch(e) {}
 
     speech.onend = () => {
         updateVisualCoreState('idle');
@@ -368,3 +292,30 @@ window.onfocus = () => {
     resetMicSystem();
 };
 
+// =======================================
+               //DATE AND TIME
+// =======================================
+function updateDateTime() {
+    const now = new Date();
+
+    // Date Format: DD - MM - YYYY
+    const dateStr = now.toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    }).replace(/\//g, " - ");
+
+    // Time Format: HH : MM : SS
+    const timeStr = now.toLocaleTimeString('en-GB', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    }).replace(/:/g, " : ");
+
+    document.getElementById("vertical-date").innerText = dateStr;
+    document.getElementById("vertical-time").innerText = timeStr;
+}
+
+// Har 1 second mein update karo
+setInterval(updateDateTime, 1000);
+updateDateTime(); // Foran chalane ke liye
