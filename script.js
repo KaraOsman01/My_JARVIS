@@ -244,6 +244,25 @@ if (command.includes("clear my list") || command.includes("delete all tasks")) {
     speak("Sir, I have cleared your to-do list as requested.");
     return;
 }
+
+// SHUTDOWN / OFFLINE COMMAND
+if (command.includes("shutdown") || command.includes("go offline") || command.includes("band ho jao") || command.includes("offline ho jao")) {
+    speak("Understood Sir. Shutting down all core systems. Systems offline process initiated 3, 2, 1, Goodbye sir.");
+    
+    // Sabse zaroori: Mic ko hamesha ke liye band karna
+    recognition.onend = null; // Taaki wo auto-restart na ho
+    setTimeout(() => {
+        recognition.stop();
+        isJarvisActive = false;
+        
+        // Visual indicator taaki pata chale system band hai
+        updateVisualCoreState('idle');
+        output.innerText = "SYSTEM STATUS: OFFLINE. (Refresh to restart)";
+        
+        console.log("Jarvis has been shut down.");
+    }, 5000); // 5 second ka wait taaki wo goodbye bol sake
+    return;
+}
     
 // MUSIC COMMAND
 if (command.includes("play") || command.includes("gaana") || command.includes("music")) {
@@ -369,15 +388,21 @@ function speak(text) {
 
     speech.onend = () => {
         updateVisualCoreState('idle');
-        // Jawab khatam hote hi mic foran restart
-        setTimeout(() => {
-        try { 
-            recognition.start(); 
-            console.log("Mic auto-restarted after speaking.");
-        } catch(e) {
-            console.log("Mic restart skipped: Already active.");
+        
+        
+        // Sirf tab restart karo agar shutdown command na di gayi ho
+        if (recognition.onend !== null) {
+            setTimeout(() => {
+                try { 
+                    recognition.start(); 
+                    console.log("Mic auto-restarted after speaking.");
+                } catch(e) {
+                    console.log("Mic restart skipped: Already active.");
+                }
+            }, 500);
+        } else {
+            console.log("System is Offline. Mic will not restart.");
         }
-    }, 500);
     };
 
     // 5. Execution (Foran bolne ke liye)
