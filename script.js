@@ -366,10 +366,6 @@ function speak(text) {
     // AUTO-SCROLL: Ye line screen ko niche le jayegi
     output.scrollTop = output.scrollHeight;
 
-    // 2. Bolne ke liye text ko "Saaf" karein
-    let cleanText = text.replace(/\*/g, "").replace(/#/g, "").replace(/_/g, "").trim();
-    const speech = new SpeechSynthesisUtterance(cleanText);
-    speech.lang = "en-IN";
 
     // 2. Bolne ke liye text ko "Saaf" karein (Symbols hatayein)
     let cleanText = text
