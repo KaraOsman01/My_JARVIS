@@ -239,6 +239,29 @@ function updateVisualCoreState(state, text = "") {
     }
 }
 
+if (command.includes("battery")) {
+    navigator.getBattery().then(battery => {
+        let level = Math.floor(battery.level * 100);
+        let status = battery.charging ? "and it is currently charging" : "and it is not charging";
+        speak(`Sir, the battery level is ${level} percent ${status}.`);
+    });
+    return;
+}
+
+// MUSIC COMMAND
+if (command.includes("play") || command.includes("gaana") || command.includes("music")) {
+    // Command mein se "play" ya "gaana" hata kar sirf song ka naam nikalte hain
+    let songName = command.replace("play", "").replace("gaana", "").replace("music", "").replace("chalao", "").trim();
+    
+    if (songName === "") {
+        speak("Sir, which song or artist would you like to hear?");
+    } else {
+        speak(`Playing ${songName} on YouTube, Sir.`);
+        window.open(`https://www.youtube.com/results?search_query=${songName}`, "_blank");
+    }
+    return;
+}
+
 // 2. JS: Mic and Speak Event Updates
 
 recognition.onstart = () => {
@@ -327,6 +350,24 @@ window.onbeforeunload = () => {
 window.onload = () => {
     const saved = localStorage.getItem("jarvis_memory");
     if (saved) chatHistory = JSON.parse(saved);
+
+    
+    const greetings = [
+        "Welcome back, Sir. All systems are green and ready for your command.",
+        "Good to see you, Sir. I've missed our brainstorming sessions.",
+        "Sir, Welcome back! Jarvis is officially online.",
+        "Welcome home, Sir. Security protocols are active. How can I help you today?",
+        "Systems at 100 percent capability. Sir, you are looking sharp today!"
+    ];
+
+    // Koi bhi ek random message pick karein
+    const randomGreet = greetings[Math.floor(Math.random() * greetings.length)];
+
+    // 1.5 second ka delay taaki page load feel ho
+    setTimeout(() => {
+        speak(randomGreet);
+    }, 1500);
+
     
     // Welcome Message based on time
     const hours = new Date().getHours();
@@ -335,7 +376,7 @@ window.onload = () => {
     else if (hours < 17) greeting = "Good Afternoon Sir";
 
     setTimeout(() => {
-        speak(`${greeting}. Systems are online. All core functions are operational.`);
+        speak(`${greeting}. Sir, Systems are online. All core functions are operational. I have updated the weather and news. Current battery is being monitored. I am ready when you are.`);
     }, 1000);
 };
 
