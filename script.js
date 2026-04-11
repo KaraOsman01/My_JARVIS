@@ -212,7 +212,7 @@ recognition.onend = () => {
 // ==============================
 // CUSTOM SMART SPEAK
 // ==============================
-function speak(text) {
+/*function speak(text) {
 
     window.speechSynthesis.cancel();
 
@@ -238,6 +238,38 @@ function speak(text) {
 
     };
 
+    window.speechSynthesis.speak(speech);
+}*/
+
+function speak(text) {
+    // 1. Purani saari awaazein turant khatam karo (Queue clear)
+    window.speechSynthesis.cancel(); 
+
+    output.innerText = "JARVIS: " + text;
+
+    const speech = new SpeechSynthesisUtterance(text);
+    
+    // 2. Voice settings set karein (Isse engine ko clear instruction milti hai)
+    speech.lang = "en-IN";
+    speech.volume = 1;
+    speech.rate = 1;
+    speech.pitch = 1;
+
+    // 3. Visual core update
+    updateVisualCoreState('speaking', "JARVIS: " + text);
+
+    // 4. Jab tak Jarvis bol raha ho, mic ko band rakhein
+    try { recognition.stop(); } catch(e) {}
+
+    speech.onend = () => {
+        updateVisuals('idle');
+        // Jawab khatam hote hi mic foran restart
+        setTimeout(() => {
+            try { recognition.start(); } catch(e) {}
+        }, 300);
+    };
+
+    // 5. Execution (Foran bolne ke liye)
     window.speechSynthesis.speak(speech);
 }
 
