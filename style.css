@@ -228,3 +228,22 @@ button:hover {
     right: 20px;
 }
 
+.dev-signature {
+    position: fixed;
+    top: 15px;
+    left: 20px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.75rem;
+    color: #00ffcc;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    opacity: 0.4; /* Isse ye subtle lagega, aankhon mein nahi chubhega */
+    z-index: 100;
+}
+
+/* Hover karne par chamke ga */
+.dev-signature:hover {
+    opacity: 1;
+    text-shadow: 0 0 10px #00ffcc;
+    cursor: default;
+}
