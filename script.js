@@ -229,7 +229,16 @@ function speak(text) {
 
     output.innerText = "JARVIS: " + text;
 
-    const speech = new SpeechSynthesisUtterance(text);
+    // 2. Bolne ke liye text ko "Saaf" karein (Symbols hatayein)
+    let cleanText = text
+        .replace(/\*/g, "")      // Saare * hata do
+        .replace(/#/g, "")       // Saare # hata do
+        .replace(/_/g, "")       // Saare _ hata do
+        .replace(/`/g, "")       // Saare code backticks hata do
+        .replace(/:/g, "")       // Colon hata do agar wo atak raha hai
+        .trim();
+
+    const speech = new SpeechSynthesisUtterance(cleanText);
     
     // 2. Voice settings set karein (Isse engine ko clear instruction milti hai)
     speech.lang = "en-IN";
