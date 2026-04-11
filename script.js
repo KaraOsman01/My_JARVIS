@@ -8,7 +8,14 @@ window.speechSynthesis.onvoiceschanged = () => {
     console.log("Voices loaded:", voices);
 };
 
-let chatHistory = []; 
+// ===========================
+//        CHAT HISTORY
+// ============================
+let chatHistory = JSON.parse(localStorage.getItem("jarvis_memory")) || [];
+// History save karne ka function
+function saveMemory() {
+    localStorage.setItem("jarvis_memory", JSON.stringify(chatHistory));
+}
 
 let isJarvisActive = false; 
 let sessionTimeout;
@@ -85,7 +92,7 @@ recognition.onresult = async (event) => {
 async function askGemini(prompt) {
     const url = "/api/gemini";
     
-    // 1. User message added to history
+    // User ka message history mein daalein
     chatHistory.push({ role: "user", parts: [{ text: prompt }] });
 
     const requestBody = {
@@ -112,12 +119,15 @@ async function askGemini(prompt) {
         if (data.candidates && data.candidates[0].content) {
             const aiReply = data.candidates[0].content.parts[0].text;
 
-            // 2. AI reply added to history
-            chatHistory.push({ role: "model", parts: [{ text: aiReply }] });
+            // AI ka jawab history mein daalein
+        chatHistory.push({ role: "model", parts: [{ text: aiReply }] });
 
             // Memory limit: Keeps only the last 20 messages
-            if (chatHistory.length > 20) chatHistory.shift();
-
+            if (chatHistory.length > 50) chatHistory.shift();
+            
+            // **DATABASE UPDATE**
+        saveMemory();
+            
             return aiReply;
         } else {
             return "Sir, I couldn't process that. Check the console.";
