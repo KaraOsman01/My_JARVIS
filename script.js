@@ -185,7 +185,64 @@ async function handleCommand(cmd) {
     return;
 }
 
-  
+// MATH CALCULATIONS
+if (command.includes("calculate") || command.includes("plus") || command.includes("minus") || command.includes("multiply") || command.includes("divide")) {
+    try {
+        // Command se words nikaal kar math expression banana
+        let expression = command.replace("calculate", "")
+                                .replace("plus", "+")
+                                .replace("minus", "-")
+                                .replace("multiply", "*")
+                                .replace("multiplied by", "*")
+                                .replace("divide", "/")
+                                .replace("divided by", "/")
+                                .replace("into", "*")
+                                .trim();
+        
+        // Math solve karna
+        let result = eval(expression); 
+        speak(`Sir, the result is ${result}`);
+    } catch (err) {
+        speak("Sir, that calculation seems too complex for my current core.");
+    }
+    return;
+}
+
+    // ADD TO-DO / REMINDER
+if (command.includes("remind me to") || command.includes("add to my list")) {
+    let task = command.replace("remind me to", "").replace("add to my list", "").trim();
+    
+    if (task) {
+        let todos = JSON.parse(localStorage.getItem("jarvis_todos")) || [];
+        todos.push(task);
+        localStorage.setItem("jarvis_todos", JSON.stringify(todos));
+        speak(`Right away Sir, I've added ${task} to your list.`);
+    } else {
+        speak("Sir, what exactly should I remind you about?");
+    }
+    return;
+}
+
+// CHECK TO-DO LIST
+if (command.includes("what's on my list") || command.includes("show my tasks") || command.includes("meri list mein kya hai")) {
+    let todos = JSON.parse(localStorage.getItem("jarvis_todos")) || [];
+    
+    if (todos.length > 0) {
+        let taskList = todos.join(", Sir. Next is ");
+        speak(`Sir, you have the following tasks: ${taskList}.`);
+    } else {
+        speak("Sir, your list is currently empty. You're all caught up!");
+    }
+    return;
+}
+
+// CLEAR LIST
+if (command.includes("clear my list") || command.includes("delete all tasks")) {
+    localStorage.removeItem("jarvis_todos");
+    speak("Sir, I have cleared your to-do list as requested.");
+    return;
+}
+    
 // MUSIC COMMAND
 if (command.includes("play") || command.includes("gaana") || command.includes("music")) {
     // Command mein se "play" ya "gaana" hata kar sirf song ka naam nikalte hain
