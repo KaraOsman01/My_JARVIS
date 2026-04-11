@@ -262,11 +262,16 @@ function speak(text) {
    // try { recognition.stop(); } catch(e) {}
 
     speech.onend = () => {
-        updateVisuals('idle');
+        updateVisualCoreState('idle');
         // Jawab khatam hote hi mic foran restart
         setTimeout(() => {
-            try { recognition.start(); } catch(e) {}
-        }, 300);
+        try { 
+            recognition.start(); 
+            console.log("Mic auto-restarted after speaking.");
+        } catch(e) {
+            console.log("Mic restart skipped: Already active.");
+        }
+    }, 500);
     };
 
     // 5. Execution (Foran bolne ke liye)
