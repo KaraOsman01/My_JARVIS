@@ -229,6 +229,9 @@ function speak(text) {
 
     output.innerText = "JARVIS: " + text;
 
+    // AUTO-SCROLL: Ye line screen ko niche le jayegi
+    output.scrollTop = output.scrollHeight;
+
     // 2. Bolne ke liye text ko "Saaf" karein (Symbols hatayein)
     let cleanText = text
         .replace(/\*/g, "")      // Saare * hata do
