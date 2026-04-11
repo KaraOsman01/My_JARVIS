@@ -351,24 +351,6 @@ window.onbeforeunload = () => {
 window.onload = () => {
     const saved = localStorage.getItem("jarvis_memory");
     if (saved) chatHistory = JSON.parse(saved);
-
-    
-    const greetings = [
-        "Welcome back, Sir. All systems are green and ready for your command.",
-        "Good to see you, Sir. I've missed our brainstorming sessions.",
-        "Sir, Welcome back! Jarvis is officially online.",
-        "Welcome home, Sir. Security protocols are active. How can I help you today?",
-        "Systems at 100 percent capability. Sir, you are looking sharp today!"
-    ];
-
-    // Koi bhi ek random message pick karein
-    const randomGreet = greetings[Math.floor(Math.random() * greetings.length)];
-
-    // 1.5 second ka delay taaki page load feel ho
-    setTimeout(() => {
-        speak(randomGreet);
-    }, 500);
-
     
     // Welcome Message based on time
     const hours = new Date().getHours();
@@ -378,7 +360,7 @@ window.onload = () => {
 
     setTimeout(() => {
         speak(`${greeting}. Sir, Systems are online. All core functions are operational. I have updated the weather and news. Current battery is being monitored. I am ready when you are.`);
-    }, 100);
+    }, 1000);
 };
 
 function resetMicSystem() {
