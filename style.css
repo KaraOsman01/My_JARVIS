@@ -38,6 +38,19 @@ h1 {
 /* margin: 20px;*/
   font-size: 1.2rem;
   min-height: 50px;
+  overflow-y: auto;  /* Agar text lamba ho toh scrollbar aa jaye */
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    scroll-behavior: smooth; /* Scrolling smooth hogi */
+}
+
+#output::-webkit-scrollbar {
+    width: 5px;
+}
+#output::-webkit-scrollbar-thumb {
+    background: #00ffcc;
+    border-radius: 10px;
 }
 
 button {
