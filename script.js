@@ -34,7 +34,7 @@ recognition.onend = () => {
 
 
 // 3. Result Handler
-recognition.onresult = async (event) => {
+/*recognition.onresult = async (event) => {
 
       // Check if result is defined
     if (!event.results) return;
@@ -76,8 +76,46 @@ recognition.onresult = async (event) => {
     else {
         console.log("Jarvis is sleeping. Say 'Jarvis' to wake him up.");
     }
-};
+};*/
+
+recognition.onresult = async (event) => {
+    if (!event.results) return;
     
+    const transcript = event.results[event.results.length - 1][0].transcript.toLowerCase().trim();
+    const alertBox = document.getElementById("wakeWordAlert");
+
+    // 1. Agar "Jarvis" bola gaya hai
+    if (transcript.includes("jarvis")) {
+        isJarvisActive = true;
+        alertBox.style.display = "none"; // Popup chhupa do agar dikh raha tha
+
+        let cleanCommand = transcript.split("jarvis").pop().trim();
+        if (cleanCommand) {
+            await handleCommand(cleanCommand);
+        } else {
+            speak("Yes Sir, I am listening.");
+        }
+    } 
+    // 2. Agar Jarvis active hai (Wake word ke baad wali baatein)
+    else if (isJarvisActive) {
+        await handleCommand(transcript);
+    } 
+    // 3. AGAR KISI NE WAKE WORD NAHI BOLA (Naya Banda)
+    else {
+        console.log("Wake word missing!");
+        
+        // Popup dikhao
+        alertBox.style.display = "block";
+        
+        // 3 second baad popup khud gayab ho jaye
+        setTimeout(() => {
+            alertBox.style.display = "none";
+        }, 3000);
+
+        // Chaho toh Jarvis bol kar bhi mana kar sakta hai
+        // speak("Please say Jarvis to start the conversation."); 
+    }
+};
 
 // ==============================
 // GEMINI API (AI BRAIN)
