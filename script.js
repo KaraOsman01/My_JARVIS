@@ -176,6 +176,29 @@ async function handleCommand(cmd) {
     return;
 }
 
+  if (command.includes("battery")) {
+    navigator.getBattery().then(battery => {
+        let level = Math.floor(battery.level * 100);
+        let status = battery.charging ? "and it is currently charging" : "and it is not charging";
+        speak(`Sir, the battery level is ${level} percent ${status}.`);
+    });
+    return;
+}
+
+  
+// MUSIC COMMAND
+if (command.includes("play") || command.includes("gaana") || command.includes("music")) {
+    // Command mein se "play" ya "gaana" hata kar sirf song ka naam nikalte hain
+    let songName = command.replace("play", "").replace("gaana", "").replace("music", "").replace("chalao", "").trim();
+    
+    if (songName === "") {
+        speak("Sir, which song or artist would you like to hear?");
+    } else {
+        speak(`Playing ${songName} on YouTube, Sir.`);
+        window.open(`https://www.youtube.com/results?search_query=${songName}`, "_blank");
+    }
+    return;
+}  
     
     // 1. Social Media & Apps (Action First)
     if (cmd.includes("open youtube")) {
@@ -239,28 +262,6 @@ function updateVisualCoreState(state, text = "") {
     }
 }
 
-if (command.includes("battery")) {
-    navigator.getBattery().then(battery => {
-        let level = Math.floor(battery.level * 100);
-        let status = battery.charging ? "and it is currently charging" : "and it is not charging";
-        speak(`Sir, the battery level is ${level} percent ${status}.`);
-    });
-    return;
-}
-
-// MUSIC COMMAND
-if (command.includes("play") || command.includes("gaana") || command.includes("music")) {
-    // Command mein se "play" ya "gaana" hata kar sirf song ka naam nikalte hain
-    let songName = command.replace("play", "").replace("gaana", "").replace("music", "").replace("chalao", "").trim();
-    
-    if (songName === "") {
-        speak("Sir, which song or artist would you like to hear?");
-    } else {
-        speak(`Playing ${songName} on YouTube, Sir.`);
-        window.open(`https://www.youtube.com/results?search_query=${songName}`, "_blank");
-    }
-    return;
-}
 
 // 2. JS: Mic and Speak Event Updates
 
