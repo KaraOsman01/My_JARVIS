@@ -53,6 +53,23 @@ h1 {
     border-radius: 10px;
 }
 
+/* User ka message style */
+.user-msg {
+    color: #ffffff; /* White color */
+    text-align: right; /* Right side dikhega */
+    margin-bottom: 10px;
+    font-style: italic;
+}
+
+/* Jarvis ka message style */
+.jarvis-msg {
+    color: #00ffff; /* Cyan color (ya jo aap chahein) */
+    text-align: left; /* Left side dikhega */
+    margin-bottom: 15px;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.5); /* Glowing Effect */
+}
+
 button {
   position: absolute;
   bottom: 40px;
