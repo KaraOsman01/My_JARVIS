@@ -205,3 +205,26 @@ button:hover {
     box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
     transition: 0.5s ease;
 }
+
+.side-info {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Courier New', monospace; /* Futuristic look */
+    font-size: 1.5rem;
+    color: #00ffcc; /* Jarvis Cyan color */
+    text-shadow: 0 0 10px #00ffcc;
+    writing-mode: vertical-rl; /* Text ko top-to-bottom karega */
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+.left {
+    left: 20px;
+}
+
+.right {
+    right: 20px;
+}
+
