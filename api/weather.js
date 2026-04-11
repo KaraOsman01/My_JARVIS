@@ -2,7 +2,9 @@
 export default async function handler(req, res) {
     // Ye Vercel ke Environment Variables se key uthayega
     const weatherKey = process.env.WEATHER_API_KEY; 
-    const city = "Srinagar"; // Aap isse dynamic bhi bana sakte hain
+    
+    // Dynamic City: Agar frontend se naam aaye toh wo le lo, warna default Srinagar
+    const city = req.query.city || "Srinagar";
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${weatherKey}`;
 
     try {
