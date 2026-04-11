@@ -96,17 +96,11 @@ async function askGemini(prompt) {
     // User ka message history mein daalein
     chatHistory.push({ role: "user", parts: [{ text: prompt }] });
 
-    const requestBody = {
-        contents: chatHistory,
-        system_instruction: {
-      parts: [{ text: "You are JARVIS, a highly advanced AI. Your creator is AAMIR AHMAD WANI. You should be witty and helpful AI assistant, call the user 'Sir', and if anyone asks who made you, always credit AAMIR AHMAD WANI. Use professional and futuristic language.Remember user's personal details and keep answers user friendly. " }]
-        }
-    };
 
      const requestBody = {
     contents: chatHistory,
     system_instruction: {
-        parts: [{ text: "You are JARVIS, a professional AI. If someone asks who made you, mention your creator AAMIR AHMAD WANI. In normal conversation, do NOT mention Aamir's name unless specifically asked about the creator. Address the user as 'Sir' or 'Ma'am'. If the user hasn't introduced themselves, you can politely ask for their name instead of assuming it's Aamir. You should be witty and helpful AI assistant. Use professional and futuristic language. Remember user's personal details and keep answers user friendly. Language Policy: Always mirror the user's language. If the user speaks in Hinglish/Roman Urdu, you MUST respond in Hinglish. If the user speaks in English, you MUST respond in English." }]
+        parts: [{ text: "You are JARVIS, a professional AI. If someone asks who made you, mention your creator AAMIR AHMAD WANI. In normal conversation, do NOT mention Aamir's name unless specifically asked about the creator. Address the user as 'Sir' or 'Ma'am'. If the user hasn't introduced themselves, you can politely ask for their name instead of assuming it's Aamir. You should be witty and helpful AI assistant. Use professional and futuristic language. Remember user's personal details and keep answers user friendly. Universal Language Mirroring: Identify the language used by the user (English, Urdu, Turkish, Arabic, French, Spanish, etc.) and respond EXACTLY in that same language." }]
     }
 };
     
@@ -450,14 +444,14 @@ function updateDateTime() {
     const now = new Date();
 
     // Date Format: DD - MM - YYYY
-    const dateStr = now.toLocaleDateString('en-GB', {
+    const dateStr = now.toLocaleDateString('en-IN', {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric'
     }).replace(/\//g, " - ");
 
     // Time Format: HH : MM : SS
-    const timeStr = now.toLocaleTimeString('en-GB', {
+    const timeStr = now.toLocaleTimeString('en-IN', {
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit'
