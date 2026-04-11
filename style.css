@@ -189,3 +189,19 @@ button:hover {
   animation-duration: 3s; /* Slightly faster than idle */
    box-shadow: 0 0 20px cyan, 0 0 60px cyan;
 }
+
+.wake-word-popup {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 0, 0, 0.8); /* Reddish warning theme */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    display: none; /* Shuru mein chhupa rahega */
+    z-index: 1000;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+    transition: 0.5s ease;
+}
