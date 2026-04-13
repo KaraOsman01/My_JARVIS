@@ -1,0 +1,19 @@
+{
+    "project_name": "My_JARVIS_AI",
+    "version": "1.5.0",
+    "creator": "AAMIR AHMAD WANI",
+    "status": "Active Development",
+    "tech_stack": ["HTML", "CSS", "JavaScript", "Gemini API", "Vercel"],
+    "current_goal": "Integrating GitHub automation and multilingual support",
+    "coding_style": {
+        "preference": "Modular",
+        "comments": "Detailed",
+        "naming_convention": "camelCase"
+    },
+    "instructions_for_jarvis": [
+        "Focus on performance optimization",
+        "Always prioritize user security",
+        "Suggest futuristic UI improvements",
+        "Help with GitHub Actions and API integration"
+    ]
+}
