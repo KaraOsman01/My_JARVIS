@@ -350,6 +350,28 @@ if (command.includes("play") || command.includes("gaana") || command.includes("m
     }
 }
 
+function giveFeedback(rating, comment) {
+    // 1. Local memory mein save karein
+    const feedback = {
+        date: new Date().toISOString(),
+        score: rating,
+        note: comment
+    };
+    
+    let logs = JSON.parse(localStorage.getItem('jarvis_feedback') || "[]");
+    logs.push(feedback);
+    localStorage.setItem('jarvis_feedback', JSON.stringify(logs));
+
+    // 2. Gemini ko batayein ke feedback mil gaya hai
+    chatHistory.push({
+        role: "user",
+        parts: [{ text: `SYSTEM FEEDBACK: The user rated your last action ${rating}/10. Note: ${comment}. Adjust your future responses based on this.` }]
+    });
+
+    speak("Thank you, Sir. I have recorded your feedback and updated my core logic.");
+}
+
+
 //test code 01
 
 // Function to update the visual state of the neural core
