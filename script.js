@@ -211,6 +211,18 @@ async function handleCommand(cmd) {
     return;
 }
 
+if (command.includes("update project status") || command.includes("finish goal")) {
+    const updatedContext = {
+        project_name: "My_JARVIS_AI",
+        status: "Goal Completed",
+        last_update: new Date().toLocaleDateString()
+    };
+    
+    speak("Updating the project status on GitHub, Sir.");
+    await updateGitHubFile("project_context.json", updatedContext, "Auto-update via JARVIS Voice Command");
+}
+
+
 // GitHub Sync Command
 if (command.includes("sync my progress") || command.includes("project update")) {
     speak("Syncing your project context from GitHub, Sir. Please wait a moment.");
@@ -350,16 +362,6 @@ if (command.includes("play") || command.includes("gaana") || command.includes("m
     }
 }
 
-if (command.includes("update project status") || command.includes("finish goal")) {
-    const updatedContext = {
-        project_name: "My_JARVIS_AI",
-        status: "Goal Completed",
-        last_update: new Date().toLocaleDateString()
-    };
-    
-    speak("Updating the project status on GitHub, Sir.");
-    await updateGitHubFile("project_context.json", updatedContext, "Auto-update via JARVIS Voice Command");
-}
 
 async function updateGitHubFile(fileName, newContent, commitMessage) {
     const GITHUB_TOKEN = "ghp_v3ClBmt0zYGutcF2QAzZBCk9jt7YOo4DuR5l"; // Aapka Token
