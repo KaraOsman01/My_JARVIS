@@ -211,6 +211,14 @@ async function handleCommand(cmd) {
     return;
 }
 
+// GitHub Sync Command
+if (command.includes("sync my progress") || command.includes("project update")) {
+    speak("Syncing your project context from GitHub, Sir. Please wait a moment.");
+    await syncProjectContext(); // Jo function aapne abhi dala
+    speak("System synchronized. I am now up to date with " + currentProjectName); // currentProjectName variable set kar lein
+    return;
+}
+
 // MATH CALCULATIONS
 if (command.includes("calculate") || command.includes("plus") || command.includes("minus") || command.includes("multiply") || command.includes("divide")) {
     try {
