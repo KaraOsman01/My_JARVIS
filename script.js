@@ -376,6 +376,33 @@ recognition.onend = () => {
     console.log("🛑 Stopped listening - Sync standby.");
 };
 
+async function syncProjectContext() {
+    // Apni repository ka raw link yahan dalein
+    const url = "https://raw.githubusercontent.com/KaraOsman01/MY_JARVIS/main/project_context.json";
+    
+    try {
+        const response = await fetch(url);
+        const context = await response.json();
+        
+        console.log("System Sync: Project Context Loaded - " + context.project_name);
+        
+        // Gemini ko batane ke liye context ko memory mein save karein
+        chatHistory.push({ 
+            role: "user", 
+            parts: [{ text: `System Update: Working on ${context.project_name}. Goal: ${context.current_goal}. Style: ${context.coding_style}.` }] 
+        });
+        
+    } catch (error) {
+        console.error("Sync failed, Sir.");
+    }
+}
+
+// Page load hote hi sync karein
+window.onload = () => {
+    syncProjectContext();
+    // Baaki ka onload code...
+};
+
 // ==============================
 // CUSTOM SMART SPEAK
 // ==============================
