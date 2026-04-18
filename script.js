@@ -397,11 +397,6 @@ async function syncProjectContext() {
     }
 }
 
-// Page load hote hi sync karein
-window.onload = () => {
-    syncProjectContext();
-    // Baaki ka onload code...
-};
 
 // ==============================
 // CUSTOM SMART SPEAK
@@ -485,6 +480,7 @@ window.onbeforeunload = () => {
 
 // Load history on startup
 window.onload = () => {
+    syncProjectContext();
     const saved = localStorage.getItem("jarvis_memory");
     if (saved) chatHistory = JSON.parse(saved);
 };
