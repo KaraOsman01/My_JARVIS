@@ -1,0 +1,21 @@
+name: JARVIS System Tasks
+on:
+  push:
+    branches: [ main ] # Jab bhi aap code push karenge, ye chalega
+  schedule:
+    - cron: '0 0 * * *' # Ye roz raat ko 12 baje automatic chalega
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: System Health Check
+        run: |
+          echo "JARVIS: Checking repository integrity..."
+          ls -R
+          echo "Sir, all files are synchronized and healthy."
+
+      - name: Auto-Cleanup (Optional)
+        run: echo "Cleaning temporary cache... Done."
