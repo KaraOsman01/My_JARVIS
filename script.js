@@ -160,6 +160,30 @@ async function handleCommand(cmd) {
         city = words[words.indexOf("ka") - 1]; // "Delhi ka weather" -> Delhi
     }
 
+    else if (command.includes("news") || command.includes("khabrein")) {
+    try {
+        const res = await fetch("/api/news");
+        const data = await res.json();
+
+        // Check karein ke articles mil rahe hain ya nahi
+        if (data.articles && data.articles.length > 0) {
+            
+            const headlines = data.articles.slice(0, 10).map((a, i) => {
+                return `News ${i + 1}: ${a.title.split("-")[0]}`; // Newspaper ka naam hata deta hai (e.g., - Times of India)
+            }).join(". ");
+
+            speak(`Sir, here are the top headlines: ${headlines}`);
+        } else {
+            speak("Sir, I found the news network but there are no fresh headlines right now.");
+            console.log("News API Response:", data); // Check karne ke liye console dekhein
+        }
+    } catch (err) {
+        speak("Sir, I am unable to reach the news servers.");
+        console.error("News Error:", err);
+    }
+    return;
+}
+
     try {
         // 2. Ab hum URL mein city ka naam bhej rahe hain: ?city=Delhi
         const res = await fetch(`/api/weather?city=${city}`); 
