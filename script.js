@@ -350,6 +350,55 @@ if (command.includes("play") || command.includes("gaana") || command.includes("m
     }
 }
 
+if (command.includes("update project status") || command.includes("finish goal")) {
+    const updatedContext = {
+        project_name: "My_JARVIS_AI",
+        status: "Goal Completed",
+        last_update: new Date().toLocaleDateString()
+    };
+    
+    speak("Updating the project status on GitHub, Sir.");
+    await updateGitHubFile("project_context.json", updatedContext, "Auto-update via JARVIS Voice Command");
+}
+
+async function updateGitHubFile(fileName, newContent, commitMessage) {
+    const GITHUB_TOKEN = "ghp_v3ClBmt0zYGutcF2QAzZBCk9jt7YOo4DuR5l"; // Aapka Token
+    const REPO_OWNER = "KaraOsman01";
+    const REPO_NAME = "My_JARVIS";
+    const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${fileName}`;
+
+    try {
+        // 1. Pehle purani file ki 'sha' (ID) leni padti hai update karne ke liye
+        const getFile = await fetch(url, {
+            headers: { "Authorization": `token ${GITHUB_TOKEN}` }
+        });
+        const fileData = await getFile.json();
+        const sha = fileData.sha;
+
+        // 2. Ab file update karein
+        const response = await fetch(url, {
+            method: "PUT",
+            headers: {
+                "Authorization": `token ${GITHUB_TOKEN}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                message: commitMessage,
+                content: btoa(JSON.stringify(newContent, null, 2)), // Content ko base64 mein convert karna hota hai
+                sha: sha
+            })
+        });
+
+        if (response.ok) {
+            speak("Success, Sir! GitHub repository has been updated.");
+        }
+    } catch (error) {
+        console.error("GitHub Update Failed:", error);
+        speak("I am sorry Sir, I couldn't access the GitHub API.");
+    }
+}
+
+
 function giveFeedback(rating, comment) {
     // 1. Local memory mein save karein
     const feedback = {
