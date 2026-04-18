@@ -321,7 +321,15 @@ if (command.includes("play") || command.includes("gaana") || command.includes("m
     }
     return;
 }  
+
+if(cmd.includes("analyze task")) { 
+    speak(analyzeWorkflow("Feature update"));
+}
     
+if(cmd.includes("sync")) {
+    gitManagerPush("project_context.json", JSON.stringify(projectContext), "Manual Sync");
+}
+
     // 1. Social Media & Apps (Action First)
     if (cmd.includes("open youtube")) {
         speak("Opening YouTube, Sir.");
@@ -478,6 +486,78 @@ async function syncProjectContext() {
     }
 }
 
+// GitHub API ke zariye files update/push karne ka logic
+async function gitManagerPush(fileName, content, commitMessage = "Auto-update by My_JARVIS_AI") {
+    const GITHUB_TOKEN = "ghp_v3ClBmt0zYGutcF2QAzZBCk9jt7YOo4DuR5l"; // Aapka token
+    const REPO_OWNER = "KaraOsman01"; 
+    const REPO_NAME = "My_JARVIS";
+    const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${fileName}`;
+
+    try {
+        // Pehle file ki SHA id leni padti hai update ke liye
+        const res = await fetch(url, { headers: { "Authorization": `token ${GITHUB_TOKEN}` } });
+        const data = await res.json();
+        const sha = data.sha;
+
+        // File update (Push) command
+        const response = await fetch(url, {
+            method: "PUT",
+            headers: { "Authorization": `token ${GITHUB_TOKEN}`, "Content-Type": "application/json" },
+            body: JSON.stringify({
+                message: commitMessage,
+                content: btoa(content), // Content ko Base64 mein convert karna zaroori hai
+                sha: sha
+            })
+        });
+
+        if (response.ok) {
+            console.log(`--- Sync Complete for ${fileName} ---`);
+            speak("Sync complete, Sir.");
+        }
+    } catch (error) {
+        console.error("Git Push Error:", error);
+    }
+}
+
+// Smart Scanner aur Header Generator logic
+function generateFileHeader(fileName, description) {
+    const date = new Date().toLocaleDateString();
+    const author = "AAMIR AHMAD WANI"; //
+    
+    return `/**
+ * Project: My_JARVIS_AI
+ * File: ${fileName}
+ * Author: ${author}
+ * Date: ${date}
+ * Description: ${description}
+ */\n\n`;
+}
+
+// Task Analysis logic
+function analyzeWorkflow(currentTask) {
+    console.log(`Analyzing task: ${currentTask}...`);
+    if (currentTask.toLowerCase().includes("debug")) {
+        return "Sir, yeh task critical lag raha hai. Kya main error logs check karun?"; //
+    } else if (currentTask.toLowerCase().includes("feature")) {
+        return "Sir, is feature ke liye modular structure best rahega. Shall I draft the schema?"; //
+    }
+    return "Task logged. I am monitoring the progress, Sir."; //
+}
+
+const JARVIS_CONFIG = {
+    version: "2.0.0",
+    language: "Roman Urdu/English",
+    developer: "AAMIR AHMAD WANI",
+    style: "Modular & Scalable",
+    auto_sync: true //
+};
+
+function runUpdate() {
+    console.log("Core Brain initialized, Sir. Ready to optimize."); //
+    // Automation sequence start
+    const status = "Core systems optimized and synced.";
+    return status;
+}
 
 // ==============================
 // CUSTOM SMART SPEAK
