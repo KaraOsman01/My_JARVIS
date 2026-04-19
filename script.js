@@ -449,26 +449,6 @@ recognition.onend = () => {
     console.log("🛑 Stopped listening - Sync standby.");
 };
 
-async function syncProjectContext() {
-    // Apni repository ka raw link yahan dalein
-    const url = "https://raw.githubusercontent.com/KaraOsman01/MY_JARVIS/main/project_context.json";
-    
-    try {
-        const response = await fetch(url);
-        const context = await response.json();
-        
-        console.log("System Sync: Project Context Loaded - " + context.project_name);
-        
-        // Gemini ko batane ke liye context ko memory mein save karein
-        chatHistory.push({ 
-            role: "user", 
-            parts: [{ text: `System Update: Working on ${context.project_name}. Goal: ${context.current_goal}. Style: ${context.coding_style}.` }] 
-        });
-        
-    } catch (error) {
-        console.error("Sync failed, Sir.");
-    }
-}
 
 // GitHub API ke zariye files update/push karne ka logic
 async function gitManagerPush(fileName, content, commitMessage = "Auto-update by My_JARVIS_AI") {
@@ -691,6 +671,28 @@ async function autoDocument(taskDescription) {
     }
 }
 
+async function syncProjectContext() {
+    const url = "https://raw.githubusercontent.com/KaraOsman01/MY_JARVIS/main/project_context.json";
+    
+    try {
+        const response = await fetch(url);
+        const context = await response.json();
+        
+        console.log("System Sync: Project Context Loaded - " + context.project_name);
+        
+        // Dashboard ko update karne ke liye ye line zaroori hai
+        updateDashboard(new Date().toLocaleTimeString(), context.current_goal || "No Active Goal");
+        
+        chatHistory.push({ 
+            role: "user", 
+            parts: [{ text: `System Update: Working on ${context.project_name}. Goal: ${context.current_goal}.` }] 
+        });
+        
+    } catch (error) {
+        console.error("Sync failed, Sir.");
+        updateDashboard("Error", "Offline");
+    }
+}
 
 function updateDashboard(syncTime, goal) {
     document.getElementById('sync-time').innerText = syncTime || new Date().toLocaleTimeString();
