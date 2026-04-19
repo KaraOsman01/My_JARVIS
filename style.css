@@ -264,10 +264,10 @@ button:hover {
     
     position: fixed; 
     top: 20px;
-    right: 20px;
+    /*right: 20px;*/
     
     /* Box ka size thoda adjust karein taaki wo screen se bahar na jaye */
-    width: 280px; 
+    width: 100vw; 
     background: rgba(0, 0, 0, 0.6); /* Thoda transparent background */
     backdrop-filter: blur(8px); /* Background blur effect */
     
