@@ -261,7 +261,12 @@ button:hover {
 }
 
 #jarvis-status-board {
-    
+    display: flex;            
+    flex-direction: row;      
+    justify-content: space-between; 
+    align-items: center;      
+    width: 100%;              
+    padding: 10px;
     position: fixed; 
     top: 20px;
     /*right: 20px;*/
@@ -279,6 +284,21 @@ button:hover {
     z-index: 1000;
     transition: all 0.5s ease;
     transition: opacity 0.5s ease-in-out;
+}
+
+#jarvis-status-board div {
+    flex: 1;                     
+    text-align: center;          
+}
+
+/* Pehle item (CORE) ko Left align karne ke liye */
+#jarvis-status-board div:first-child {
+    text-align: left;
+}
+
+/* Aakhri item (GOAL) ko Right align karne ke liye */
+#jarvis-status-board div:last-child {
+    text-align: right;
 }
 
 #goal-display {
