@@ -386,6 +386,10 @@ async function updateGitHubFile(fileName, newContent, commitMessage) {
     const success = await callGithubBackend(fileName, btoa(JSON.stringify(newContent, null, 2)), commitMessage);
     if (success) speak("Success Sir! GitHub updated via Secure Backend.");
 }
+try {
+    // Aapka kaam wala code
+    await callGithubBackend(fileName, content, msg);
+}
 catch (error) {
         console.error("GitHub Update Failed:", error);
         speak("I am sorry Sir, I couldn't access the GitHub API.");
@@ -474,6 +478,10 @@ async function gitManagerPush(fileName, content, commitMessage = "Auto-update by
     const success = await callGithubBackend(fileName, btoa(content), commitMessage);
     if (success) speak("Sync complete, Sir.");
 } 
+try {
+    // Aapka kaam wala code
+    await callGithubBackend(fileName, content, msg);
+}
 catch (error) {
         console.error("Git Push Error:", error);
     }
@@ -684,7 +692,12 @@ async function autoDocument(taskDescription) {
         speak("Sir, documentation updated securely.");
         updateDashboard(new Date().toLocaleTimeString(), taskDescription);
     }
-} catch (err) {
+}
+try {
+    // Aapka kaam wala code
+    await callGithubBackend(fileName, content, msg);
+}
+catch (err) {
         console.error("Documentation failed:", err);
     }
 
