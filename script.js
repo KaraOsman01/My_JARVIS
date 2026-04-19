@@ -383,40 +383,12 @@ if(cmd.includes("sync")) {
 
 
 async function updateGitHubFile(fileName, newContent, commitMessage) {
-    const GITHUB_TOKEN = ""; // Aapka Token
-    const REPO_OWNER = "KaraOsman01";
-    const REPO_NAME = "My_JARVIS";
-    const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${fileName}`;
-
-    try {
-        // 1. Pehle purani file ki 'sha' (ID) leni padti hai update karne ke liye
-        const getFile = await fetch(url, {
-            headers: { "Authorization": `token ${GITHUB_TOKEN}` }
-        });
-        const fileData = await getFile.json();
-        const sha = fileData.sha;
-
-        // 2. Ab file update karein
-        const response = await fetch(url, {
-            method: "PUT",
-            headers: {
-                "Authorization": `token ${GITHUB_TOKEN}`,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                message: commitMessage,
-                content: btoa(JSON.stringify(newContent, null, 2)), // Content ko base64 mein convert karna hota hai
-                sha: sha
-            })
-        });
-
-        if (response.ok) {
-            speak("Success, Sir! GitHub repository has been updated.");
-        }
-    } catch (error) {
+    const success = await callGithubBackend(fileName, btoa(JSON.stringify(newContent, null, 2)), commitMessage);
+    if (success) speak("Success Sir! GitHub updated via Secure Backend.");
+}
+catch (error) {
         console.error("GitHub Update Failed:", error);
         speak("I am sorry Sir, I couldn't access the GitHub API.");
-    }
 }
 
 
@@ -499,36 +471,13 @@ async function syncProjectContext() {
 
 // GitHub API ke zariye files update/push karne ka logic
 async function gitManagerPush(fileName, content, commitMessage = "Auto-update by My_JARVIS_AI") {
-    const GITHUB_TOKEN = ""; // Aapka token
-    const REPO_OWNER = "KaraOsman01"; 
-    const REPO_NAME = "My_JARVIS";
-    const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${fileName}`;
-
-    try {
-        // Pehle file ki SHA id leni padti hai update ke liye
-        const res = await fetch(url, { headers: { "Authorization": `token ${GITHUB_TOKEN}` } });
-        const data = await res.json();
-        const sha = data.sha;
-
-        // File update (Push) command
-        const response = await fetch(url, {
-            method: "PUT",
-            headers: { "Authorization": `token ${GITHUB_TOKEN}`, "Content-Type": "application/json" },
-            body: JSON.stringify({
-                message: commitMessage,
-                content: btoa(content), // Content ko Base64 mein convert karna zaroori hai
-                sha: sha
-            })
-        });
-
-        if (response.ok) {
-            console.log(`--- Sync Complete for ${fileName} ---`);
-            speak("Sync complete, Sir.");
-        }
-    } catch (error) {
+    const success = await callGithubBackend(fileName, btoa(content), commitMessage);
+    if (success) speak("Sync complete, Sir.");
+} 
+catch (error) {
         console.error("Git Push Error:", error);
     }
-}
+
 
 // Smart Scanner aur Header Generator logic
 function generateFileHeader(fileName, description) {
@@ -722,42 +671,23 @@ console.log("JARVIS Brain Integrated directly into main script.");
 
 async function autoDocument(taskDescription) {
     const fileName = "README.md";
-    const GITHUB_TOKEN = "";
-    const url = `https://api.github.com/repos/KaraOsman01/My_JARVIS/contents/${fileName}`;
+    // Pehle purana README fetch karein taaki uske niche naya task likh sakein
+    const res = await fetch(`https://api.github.com/repos/KaraOsman01/My_JARVIS/contents/${fileName}`);
+    const data = await res.json();
+    let currentContent = data.content ? atob(data.content) : ""; 
 
-    try {
-        // 1. Fetch current README
-        const res = await fetch(url, { headers: { "Authorization": `token ${GITHUB_TOKEN}` } });
-        const data = await res.json();
-        let currentContent = data.content ? atob(data.content) : ""; 
+    const timeStamp = new Date().toLocaleString();
+    const updatedContent = currentContent + `\n- **Update [${timeStamp}]:** ${taskDescription}`;
 
-        // 2. Prepare update
-        const timeStamp = new Date().toLocaleString();
-        const newUpdate = `\n- **Update [${timeStamp}]:** ${taskDescription}`;
-        let updatedContent = currentContent + newUpdate;
-
-        // 3. Push to GitHub
-        const response = await fetch(url, {
-            method: "PUT",
-            headers: { "Authorization": `token ${GITHUB_TOKEN}`, "Content-Type": "application/json" },
-            body: JSON.stringify({
-                message: "JARVIS: Auto-documenting new task",
-                content: btoa(updatedContent),
-                sha: data.sha
-            })
-        });
-
-        if (response.ok) {
-            speak("Sir, documentation updated.");
-            // Dashboard ko update karein (Ensure updateDashboard exists)
-            if (typeof updateDashboard === "function") {
-                updateDashboard(new Date().toLocaleTimeString(), taskDescription);
-            }
-        }
-    } catch (err) {
+    const success = await callGithubBackend(fileName, btoa(updatedContent), "JARVIS: Auto-documentation");
+    if (success) {
+        speak("Sir, documentation updated securely.");
+        updateDashboard(new Date().toLocaleTimeString(), taskDescription);
+    }
+} catch (err) {
         console.error("Documentation failed:", err);
     }
-}
+
 
 function updateDashboard(syncTime, goal) {
     document.getElementById('sync-time').innerText = syncTime || new Date().toLocaleTimeString();
@@ -769,4 +699,31 @@ function updateDashboard(syncTime, goal) {
     setTimeout(() => {
         board.style.boxShadow = "0 0 15px rgba(0, 255, 255, 0.3)";
     }, 500);
+}
+
+
+async function callGithubBackend(fileName, base64Content, commitMessage) {
+    try {
+        // 1. SHA fetch karna (File update ke liye zaroori hai)
+        const getRes = await fetch(`https://api.github.com/repos/KaraOsman01/My_JARVIS/contents/${fileName}`);
+        const getData = await getRes.json();
+        const sha = getData.sha;
+
+        // 2. Apne Backend (api/github.js) ko data bhejna
+        const res = await fetch("/api/github", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                fileName: fileName,
+                content: base64Content,
+                commitMessage: commitMessage,
+                sha: sha
+            })
+        });
+
+        return res.ok;
+    } catch (err) {
+        console.error("Backend Call Failed:", err);
+        return false;
+    }
 }
