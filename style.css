@@ -267,13 +267,12 @@ button:hover {
     justify-content: space-between; 
     align-items: center;      
     width: 90%;              
-    /*padding: 10px;*/
     position: fixed; 
-    top: 30px;
-    /*right: 20px;*/
+    top: 37px;
+    
     
     /* Box ka size thoda adjust karein taaki wo screen se bahar na jaye */
-    /*width: 100vw;*/
+    
     background: rgba(0, 0, 0, 0.6); /* Thoda transparent background */
     backdrop-filter: blur(8px); /* Background blur effect */
     
