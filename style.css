@@ -265,10 +265,10 @@ button:hover {
     flex-direction: row;      
     justify-content: space-between; 
     align-items: center;      
-    width: 100%;              
+    width: 90%;              
     padding: 10px;
     position: fixed; 
-    top: 20px;
+    top: 30px;
     /*right: 20px;*/
     
     /* Box ka size thoda adjust karein taaki wo screen se bahar na jaye */
