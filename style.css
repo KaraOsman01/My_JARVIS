@@ -259,3 +259,13 @@ button:hover {
     text-shadow: 0 0 10px #00ffcc;
     cursor: default;
 }
+#jarvis-status-board {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.4); /* Thoda transparent taaki piche ka glow dikhe */
+    backdrop-filter: blur(5px); /* Glassmorphism effect */
+    border-left: 3px solid #00ffff; /* Sirf ek side border zyada professional lagta hai */
+    padding: 15px;
+    z-index: 100;
+}
