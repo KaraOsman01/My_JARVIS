@@ -307,6 +307,17 @@ if (command.includes("shutdown") || command.includes("go offline") || command.in
     }, 5000); // 5 second ka wait taaki wo goodbye bol sake
     return;
 }
+
+if (command.includes("document this") || command.includes("note down")) {
+    // Command se task ka naam nikaalein (e.g., "document this new login feature")
+    let task = command.replace("document this", "").replace("note down", "").trim();
+    if (task) {
+        speak("Understood Sir, documenting: " + task);
+        autoDocument(task);
+    } else {
+        speak("Sir, please specify what should I document.");
+    }
+}
     
 // MUSIC COMMAND
 if (command.includes("play") || command.includes("gaana") || command.includes("music")) {
@@ -708,3 +719,52 @@ const TaskScheduler = {
 
 // Ise initialization function mein call karein
 console.log("JARVIS Brain Integrated directly into main script.");
+
+async function autoDocument(taskDescription) {
+    const fileName = "README.md";
+    const GITHUB_TOKEN = "ghp_v3ClBmt0zYGutcF2QAzZBCk9jt7YOo4DuR5l";
+    const url = `https://api.github.com/repos/KaraOsman01/My_JARVIS/contents/${fileName}`;
+
+    try {
+        // 1. Pehle README ki maujooda halat fetch karein
+        const res = await fetch(url, { headers: { "Authorization": `token ${GITHUB_TOKEN}` } });
+        const data = await res.json();
+        let currentContent = atob(data.sha ? data.content : ""); // Base64 decode
+
+        // 2. Naya update tyyar karein
+        const timeStamp = new Date().toLocaleString();
+        const newUpdate = `\n- **Update [${timeStamp}]:** ${taskDescription}`;
+        
+        // Agar README mein "Recent Updates" section hai toh wahan add karein, warna end mein
+        let updatedContent = currentContent + newUpdate;
+
+        // 3. GitHub par wapas push karein
+        const response = await fetch(url, {
+            method: "PUT",
+            headers: { "Authorization": `token ${GITHUB_TOKEN}`, "Content-Type": "application/json" },
+            body: JSON.stringify({
+                message: "JARVIS: Auto-documenting new task",
+                content: btoa(updatedContent),
+                sha: data.sha
+            })
+        });
+
+        if (response.ok) {
+    speak("Sir, documentation updated.");
+    updateDashboard(new Date().toLocaleTimeString(), taskDescription); // Dashboard update
+} catch (err) {
+        console.error("Documentation failed:", err);
+    }
+}
+
+function updateDashboard(syncTime, goal) {
+    document.getElementById('sync-time').innerText = syncTime || new Date().toLocaleTimeString();
+    document.getElementById('goal-display').innerText = goal || "No Active Goal";
+    
+    // Ek choti si animation taaki feel aaye ke system scan ho raha hai
+    const board = document.getElementById('jarvis-status-board');
+    board.style.boxShadow = "0 0 30px rgba(0, 255, 255, 0.8)";
+    setTimeout(() => {
+        board.style.boxShadow = "0 0 15px rgba(0, 255, 255, 0.3)";
+    }, 500);
+}
