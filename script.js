@@ -383,16 +383,13 @@ if(cmd.includes("sync")) {
 
 
 async function updateGitHubFile(fileName, newContent, commitMessage) {
-    const success = await callGithubBackend(fileName, btoa(JSON.stringify(newContent, null, 2)), commitMessage);
-    if (success) speak("Success Sir! GitHub updated via Secure Backend.");
-}
-try {
-    // Aapka kaam wala code
-    await callGithubBackend(fileName, content, msg);
-}
-catch (error) {
+    try {
+        const success = await callGithubBackend(fileName, btoa(JSON.stringify(newContent, null, 2)), commitMessage);
+        if (success) speak("Success Sir! GitHub updated via Secure Backend.");
+    } catch (error) {
         console.error("GitHub Update Failed:", error);
         speak("I am sorry Sir, I couldn't access the GitHub API.");
+    }
 }
 
 
@@ -475,16 +472,13 @@ async function syncProjectContext() {
 
 // GitHub API ke zariye files update/push karne ka logic
 async function gitManagerPush(fileName, content, commitMessage = "Auto-update by My_JARVIS_AI") {
-    const success = await callGithubBackend(fileName, btoa(content), commitMessage);
-    if (success) speak("Sync complete, Sir.");
-} 
-try {
-    // Aapka kaam wala code
-    await callGithubBackend(fileName, content, msg);
-}
-catch (error) {
+    try {
+        const success = await callGithubBackend(fileName, btoa(content), commitMessage);
+        if (success) speak("Sync complete, Sir.");
+    } catch (error) {
         console.error("Git Push Error:", error);
     }
+}
 
 
 // Smart Scanner aur Header Generator logic
@@ -678,28 +672,24 @@ const TaskScheduler = {
 console.log("JARVIS Brain Integrated directly into main script.");
 
 async function autoDocument(taskDescription) {
-    const fileName = "README.md";
-    // Pehle purana README fetch karein taaki uske niche naya task likh sakein
-    const res = await fetch(`https://api.github.com/repos/KaraOsman01/My_JARVIS/contents/${fileName}`);
-    const data = await res.json();
-    let currentContent = data.content ? atob(data.content) : ""; 
+    try {
+        const fileName = "README.md";
+        const res = await fetch(`https://api.github.com/repos/KaraOsman01/My_JARVIS/contents/${fileName}`);
+        const data = await res.json();
+        let currentContent = data.content ? atob(data.content) : ""; 
 
-    const timeStamp = new Date().toLocaleString();
-    const updatedContent = currentContent + `\n- **Update [${timeStamp}]:** ${taskDescription}`;
+        const timeStamp = new Date().toLocaleString();
+        const updatedContent = currentContent + `\n- **Update [${timeStamp}]:** ${taskDescription}`;
 
-    const success = await callGithubBackend(fileName, btoa(updatedContent), "JARVIS: Auto-documentation");
-    if (success) {
-        speak("Sir, documentation updated securely.");
-        updateDashboard(new Date().toLocaleTimeString(), taskDescription);
-    }
-}
-try {
-    // Aapka kaam wala code
-    await callGithubBackend(fileName, content, msg);
-}
-catch (err) {
+        const success = await callGithubBackend(fileName, btoa(updatedContent), "JARVIS: Auto-documentation");
+        if (success) {
+            speak("Sir, documentation updated securely.");
+            updateDashboard(new Date().toLocaleTimeString(), taskDescription);
+        }
+    } catch (err) {
         console.error("Documentation failed:", err);
     }
+}
 
 
 function updateDashboard(syncTime, goal) {
