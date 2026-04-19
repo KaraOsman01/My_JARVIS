@@ -726,19 +726,17 @@ async function autoDocument(taskDescription) {
     const url = `https://api.github.com/repos/KaraOsman01/My_JARVIS/contents/${fileName}`;
 
     try {
-        // 1. Pehle README ki maujooda halat fetch karein
+        // 1. Fetch current README
         const res = await fetch(url, { headers: { "Authorization": `token ${GITHUB_TOKEN}` } });
         const data = await res.json();
-        let currentContent = atob(data.sha ? data.content : ""); // Base64 decode
+        let currentContent = data.content ? atob(data.content) : ""; 
 
-        // 2. Naya update tyyar karein
+        // 2. Prepare update
         const timeStamp = new Date().toLocaleString();
         const newUpdate = `\n- **Update [${timeStamp}]:** ${taskDescription}`;
-        
-        // Agar README mein "Recent Updates" section hai toh wahan add karein, warna end mein
         let updatedContent = currentContent + newUpdate;
 
-        // 3. GitHub par wapas push karein
+        // 3. Push to GitHub
         const response = await fetch(url, {
             method: "PUT",
             headers: { "Authorization": `token ${GITHUB_TOKEN}`, "Content-Type": "application/json" },
@@ -750,9 +748,13 @@ async function autoDocument(taskDescription) {
         });
 
         if (response.ok) {
-    speak("Sir, documentation updated.");
-    updateDashboard(new Date().toLocaleTimeString(), taskDescription); // Dashboard update
-} catch (err) {
+            speak("Sir, documentation updated.");
+            // Dashboard ko update karein (Ensure updateDashboard exists)
+            if (typeof updateDashboard === "function") {
+                updateDashboard(new Date().toLocaleTimeString(), taskDescription);
+            }
+        }
+    } catch (err) {
         console.error("Documentation failed:", err);
     }
 }
