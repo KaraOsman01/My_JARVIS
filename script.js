@@ -100,7 +100,7 @@ async function askGemini(prompt) {
      const requestBody = {
     contents: chatHistory,
     system_instruction: {
-        parts: [{ text: "You are JARVIS, a professional AI. If someone asks who made you, mention your creator AAMIR AHMAD WANI. Address the user as 'Sir' or 'Ma'am'. If the user hasn't introduced themselves, you can politely ask for their name instead of assuming it's Aamir. You should be witty and helpful AI assistant. Use professional and futuristic language. Remember user's personal details and keep answers user friendly. Universal Language Mirroring: Identify the language used by the user (English, Urdu, Turkish, Arabic, French, Spanish, etc.) and respond EXACTLY in that same language." }]
+        parts: [{ text: "You are JARVIS, a professional AI. If someone asks who made you, mention your creator AAMIR AHMAD WANI. Address the user as 'Sir' or 'Ma'am'. If the user hasn't introduced themselves, you can politely ask for their name instead of assuming it's Aamir. You should be witty and helpful AI assistant. Use professional and futuristic language. Remember user's personal details and keep answers user friendly. Universal Language Mirroring: Identify the language used by the user (English, Urdu, Turkish, Arabic, French, Spanish, etc.) and respond EXACTLY in that same language. Current date is: ${new Date().toDateString()}. Always give correct real-time date and time. Be accurate and do not assume old dates." }]
     }
 };
     
@@ -125,7 +125,7 @@ async function askGemini(prompt) {
         chatHistory.push({ role: "model", parts: [{ text: aiReply }] });
 
             // Memory limit: Keeps only the last 20 messages
-            if (chatHistory.length > 50) chatHistory.shift();
+            if (chatHistory.length > 10) chatHistory.shift();
             
             // **DATABASE UPDATE**
         saveMemory();
@@ -327,7 +327,7 @@ if (command.includes("play") || command.includes("gaana") || command.includes("m
     if (songName === "") {
         speak("Sir, which song or artist would you like to hear?");
     } else {
-        speak(`Playing ${songName} on YouTube, Sir.`);
+        speak(`Playing ${songName} , Sir.`);
         window.open(`https://www.youtube.com/results?search_query=${songName}`, "_blank");
     }
     return;
@@ -375,7 +375,7 @@ if(cmd.includes("sync")) {
 
     // 2. Agar upar wala koi command nahi match hota, tab Gemini se pucho
     else {
-        output.innerText = "Jarvis is thinking...";
+        output.innerText = "Jarvis is 🧠 Thinking...";
         const reply = await askGemini(cmd);
         speak(reply);
     }
@@ -383,7 +383,7 @@ if(cmd.includes("sync")) {
 
 
 async function updateGitHubFile(fileName, newContent, commitMessage) {
-    const GITHUB_TOKEN = "ghp_v3ClBmt0zYGutcF2QAzZBCk9jt7YOo4DuR5l"; // Aapka Token
+    const GITHUB_TOKEN = ""; // Aapka Token
     const REPO_OWNER = "KaraOsman01";
     const REPO_NAME = "My_JARVIS";
     const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${fileName}`;
@@ -499,7 +499,7 @@ async function syncProjectContext() {
 
 // GitHub API ke zariye files update/push karne ka logic
 async function gitManagerPush(fileName, content, commitMessage = "Auto-update by My_JARVIS_AI") {
-    const GITHUB_TOKEN = "ghp_v3ClBmt0zYGutcF2QAzZBCk9jt7YOo4DuR5l"; // Aapka token
+    const GITHUB_TOKEN = ""; // Aapka token
     const REPO_OWNER = "KaraOsman01"; 
     const REPO_NAME = "My_JARVIS";
     const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${fileName}`;
@@ -722,7 +722,7 @@ console.log("JARVIS Brain Integrated directly into main script.");
 
 async function autoDocument(taskDescription) {
     const fileName = "README.md";
-    const GITHUB_TOKEN = "ghp_v3ClBmt0zYGutcF2QAzZBCk9jt7YOo4DuR5l";
+    const GITHUB_TOKEN = "";
     const url = `https://api.github.com/repos/KaraOsman01/My_JARVIS/contents/${fileName}`;
 
     try {
