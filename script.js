@@ -1,11 +1,11 @@
-import { JARVIS_CONFIG, TaskScheduler, GitManager, initJarvis } from './master_init.js';
+/*import { JARVIS_CONFIG, TaskScheduler, GitManager, initJarvis } from './master_init.js';
 
 // Jab system start ho
 initJarvis();
 
 // Jab aap Mic par koi task bole (e.g., "I am working on a new feature")
 let response = TaskScheduler.analyzeWorkflow("New feature update");
-speak(response); // Jarvis bol kar jawab dega
+speak(response); // Jarvis bol kar jawab dega*/
 
 
 // ==============================
