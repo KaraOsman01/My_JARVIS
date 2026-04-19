@@ -375,6 +375,10 @@ if(cmd.includes("sync")) {
 
     // 2. Agar upar wala koi command nahi match hota, tab Gemini se pucho
     else {
+
+        const board = document.getElementById('jarvis-status-board');
+    if (board) board.style.opacity = "0"; // Thinking ke waqt hide karo
+        
         output.innerText = "Jarvis is 🧠 Thinking...";
         const reply = await askGemini(cmd);
         speak(reply);
@@ -506,7 +510,10 @@ function runUpdate() {
 // ==============================
 
 function speak(text) {
-    // 1. Purani saari awaazein turant khatam karo (Queue clear)
+
+    const board = document.getElementById('jarvis-status-board');
+    if (board) board.style.opacity = "0";
+    
     window.speechSynthesis.cancel(); 
 
     output.innerText = "JARVIS: " + text;
@@ -536,6 +543,9 @@ function speak(text) {
     updateVisualCoreState('speaking', "JARVIS: " + text);
 
     speech.onend = () => {
+
+           if (board) board.style.opacity = "1"; // Board wapas aa gaya
+        
         updateVisualCoreState('idle');
         
         
@@ -671,6 +681,33 @@ async function autoDocument(taskDescription) {
     }
 }
 
+async function callGithubBackend(fileName, base64Content, commitMessage) {
+    try {
+        // 1. SHA fetch karna (File update ke liye zaroori hai)
+        const getRes = await fetch(`https://api.github.com/repos/KaraOsman01/My_JARVIS/contents/${fileName}`);
+        const getData = await getRes.json();
+        const sha = getData.sha;
+
+        // 2. Apne Backend (api/github.js) ko data bhejna
+        const res = await fetch("/api/github", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                fileName: fileName,
+                content: base64Content,
+                commitMessage: commitMessage,
+                sha: sha
+            })
+        });
+
+        return res.ok;
+    } catch (err) {
+        console.error("Backend Call Failed:", err);
+        return false;
+    }
+}
+
+
 async function syncProjectContext() {
     const url = "https://raw.githubusercontent.com/KaraOsman01/MY_JARVIS/main/project_context.json";
     
@@ -707,28 +744,13 @@ function updateDashboard(syncTime, goal) {
 }
 
 
-async function callGithubBackend(fileName, base64Content, commitMessage) {
-    try {
-        // 1. SHA fetch karna (File update ke liye zaroori hai)
-        const getRes = await fetch(`https://api.github.com/repos/KaraOsman01/My_JARVIS/contents/${fileName}`);
-        const getData = await getRes.json();
-        const sha = getData.sha;
-
-        // 2. Apne Backend (api/github.js) ko data bhejna
-        const res = await fetch("/api/github", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                fileName: fileName,
-                content: base64Content,
-                commitMessage: commitMessage,
-                sha: sha
-            })
-        });
-
-        return res.ok;
-    } catch (err) {
-        console.error("Backend Call Failed:", err);
-        return false;
+function toggleStatusBoard(show) {
+    const board = document.getElementById('jarvis-status-board');
+    if (board) {
+        if (show) {
+            board.classList.remove('hidden-board'); // Board wapas aayega
+        } else {
+            board.classList.add('hidden-board');    // Board gayab ho jayega
+        }
     }
 }
