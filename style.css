@@ -259,13 +259,32 @@ button:hover {
     text-shadow: 0 0 10px #00ffcc;
     cursor: default;
 }
+
 #jarvis-status-board {
-    position: fixed;
+    
+    position: fixed; 
     top: 20px;
     right: 20px;
-    background: rgba(0, 0, 0, 0.4); /* Thoda transparent taaki piche ka glow dikhe */
-    backdrop-filter: blur(5px); /* Glassmorphism effect */
-    border-left: 3px solid #00ffff; /* Sirf ek side border zyada professional lagta hai */
-    padding: 15px;
-    z-index: 100;
+    
+    /* Box ka size thoda adjust karein taaki wo screen se bahar na jaye */
+    width: 280px; 
+    background: rgba(0, 0, 0, 0.6); /* Thoda transparent background */
+    backdrop-filter: blur(8px); /* Background blur effect */
+    
+    /* Futuristic border style */
+    border: 1px solid rgba(0, 255, 255, 0.3);
+    border-left: 4px solid #00ffff;
+    
+    padding: 12px;
+    z-index: 1000;
+    transition: all 0.5s ease;
 }
+
+#goal-display {
+    display: block;
+    font-size: 0.8rem;
+    color: #00ffff;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Lamba text ... mein badal jayega */
+    white-space: nowrap;
+} 
