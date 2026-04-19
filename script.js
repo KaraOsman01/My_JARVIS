@@ -1,13 +1,3 @@
-/*import { JARVIS_CONFIG, TaskScheduler, GitManager, initJarvis } from './master_init.js';
-
-// Jab system start ho
-initJarvis();
-
-// Jab aap Mic par koi task bole (e.g., "I am working on a new feature")
-let response = TaskScheduler.analyzeWorkflow("New feature update");
-speak(response); // Jarvis bol kar jawab dega*/
-
-
 // ==============================
 // JARVIS VOICE ASSISTANT CORE
 // ==============================
@@ -707,3 +697,14 @@ function updateDateTime() {
 // Har 1 second mein update karo
 setInterval(updateDateTime, 1000);
 updateDateTime(); // Foran chalane ke liye
+
+
+const TaskScheduler = {
+    analyzeWorkflow: (task) => {
+        if (task.includes("feature")) return "Sir, modular structure best rahega.";
+        return "Task logged, Sir.";
+    }
+};
+
+// Ise initialization function mein call karein
+console.log("JARVIS Brain Integrated directly into main script.");
