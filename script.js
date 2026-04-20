@@ -851,5 +851,46 @@ function toggleStatusBoard(show) {
     }
 }
 
+// ==========================================
+// JARVIS FILE SYSTEM LOGIC
+// ==========================================
+
+const fileInput = document.getElementById('jarvis-file-input');
+const uploadBtn = document.getElementById('upload-trigger-btn');
+
+// 1. Button click par gallery/files open karna
+uploadBtn.onclick = () => fileInput.click();
+
+// 2. File select hone par process karna
+fileInput.onchange = async (e) => {
+    const files = e.target.files;
+    if (files.length === 0) return;
+
+    speak(`Analyzing ${files.length} items for you, ${currentUserName}.`);
+
+    for (let file of files) {
+        const reader = new FileReader();
+
+        if (file.type.startsWith('image/')) {
+            // Screenshot ya Photo handling
+            reader.readAsDataURL(file);
+            reader.onload = async () => {
+                const base64Data = reader.result.split(',')[1];
+                // JARVIS ko image bhej rahe hain
+                const response = await askGemini("Sir has provided this image. Please analyze it and provide technical insights.", base64Data, file.type);
+                speak(response);
+            };
+        } else {
+            // Code ya Text files handling
+            reader.readAsText(file);
+            reader.onload = async () => {
+                const textContent = reader.result;
+                const response = await askGemini(`User uploaded a file (${file.name}): \n\n ${textContent}`);
+                speak(response);
+            };
+        }
+    }
+};
+
 
                             
