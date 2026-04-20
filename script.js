@@ -873,7 +873,7 @@ function toggleStatusBoard(show) {
     }
 }
 
-// ==================================
+/*==================================
 // UPLOAD FILE OPTION 
 // ==================================
 
@@ -1107,4 +1107,89 @@ universalInput.onchange = async (e) => {
             };
         }
     }
+};*/
+
+// ==========================================
+// JARVIS UNIVERSAL UPLOAD SYSTEM (FIXED)
+// ==========================================
+
+const initUploadSystem = () => {
+    // 1. Pehle check karein agar purana button hai to usey hatayein
+    const existingBtn = document.getElementById('jarvis-upload-btn');
+    if (existingBtn) existingBtn.remove();
+
+    // 2. Hidden File Input Create Karein
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.id = 'universal-file-input';
+    fileInput.multiple = true;
+    fileInput.accept = "image/*, .html, .css, .js, .txt, .pdf, .json";
+    fileInput.style.display = 'none';
+    document.body.appendChild(fileInput);
+
+    // 3. Floating Button Create Karein (Left Side)
+    const uploadBtn = document.createElement('button');
+    uploadBtn.id = 'jarvis-upload-btn';
+    uploadBtn.innerHTML = '&#128206;'; // Paperclip Icon
+    uploadBtn.style.cssText = `
+        position: fixed;
+        bottom: 30px;
+        left: 30px;
+        width: 60px;
+        height: 60px;
+        background: rgba(0, 0, 0, 0.85);
+        border: 2px solid #00ffff;
+        color: #00ffff;
+        border-radius: 50%;
+        font-size: 28px;
+        cursor: pointer;
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.2s;
+    `;
+    
+    // Hover effect
+    uploadBtn.onmouseover = () => uploadBtn.style.transform = "scale(1.1)";
+    uploadBtn.onmouseout = () => uploadBtn.style.transform = "scale(1)";
+    
+    document.body.appendChild(uploadBtn);
+
+    // Button click triggers input
+    uploadBtn.onclick = () => fileInput.click();
+
+    // 4. File Handling Logic
+    fileInput.onchange = async (e) => {
+        const files = e.target.files;
+        if (files.length === 0) return;
+
+        speak(`Processing ${files.length} files, Sir.`);
+
+        for (let file of files) {
+            const reader = new FileReader();
+
+            if (file.type.startsWith('image/')) {
+                // Handling Images (Screenshots/Gallery)
+                reader.readAsDataURL(file);
+                reader.onload = async () => {
+                    const base64Data = reader.result.split(',')[1];
+                    const reply = await askGemini("User uploaded an image. Analyze it.", base64Data, file.type);
+                    speak(reply);
+                };
+            } else {
+                // Handling Text Files (Code/Docs)
+                reader.readAsText(file);
+                reader.onload = async () => {
+                    const textContent = reader.result;
+                    const reply = await askGemini(`Analyze this file content (${file.name}): \n\n ${textContent}`);
+                    speak(reply);
+                };
+            }
+        }
+    };
 };
+
+// Function ko run karein
+initUploadSystem();
