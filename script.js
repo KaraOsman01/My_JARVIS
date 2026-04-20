@@ -707,6 +707,9 @@ async function callGithubBackend(fileName, base64Content, commitMessage) {
     }
 }
 
+// ===========================================================
+//       system status 
+// ===========================================================
 
 async function syncProjectContext() {
     const url = "https://raw.githubusercontent.com/KaraOsman01/MY_JARVIS/main/project_context.json";
@@ -732,8 +735,22 @@ async function syncProjectContext() {
 }
 
 function updateDashboard(syncTime, goal) {
-    document.getElementById('sync-time').innerText = syncTime || new Date().toLocaleTimeString();
-    document.getElementById('goal-display').innerText = goal || "No Active Goal";
+    const goalEl = document.getElementById('goal-display');
+    const timeEl = document.getElementById('sync-time');
+
+    if (timeEl) timeEl.innerText = syncTime;
+
+    if (goalEl) {
+        goalEl.innerText = goal;
+
+        // Hamesha floating banane ke liye properties
+        goalEl.style.display = "inline-block";
+        goalEl.style.whiteSpace = "nowrap";
+        goalEl.style.paddingLeft = "100%"; // Text ko shuru mein right side se bahar rakhega
+        
+        // Animation trigger (Hamesha on rahegi)
+        // 10s speed hai, agar tez karna ho toh 5s kar dena
+        goalEl.style.animation = "marquee 10s linear infinite";
     
     // Ek choti si animation taaki feel aaye ke system scan ho raha hai
     const board = document.getElementById('jarvis-status-board');
@@ -742,7 +759,7 @@ function updateDashboard(syncTime, goal) {
         board.style.boxShadow = "0 0 15px rgba(0, 255, 255, 0.3)";
     }, 500);
 }
-
+}
 
 function toggleStatusBoard(show) {
     const board = document.getElementById('jarvis-status-board');
