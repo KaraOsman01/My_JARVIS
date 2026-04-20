@@ -301,6 +301,12 @@ button:hover {
     text-align: right;
 }
 
+#goal-container { 
+    width: 250px;      
+    overflow: hidden;  
+    position: relative;
+}
+
 #goal-display {
     display: block;
     font-size: 0.8rem;
@@ -313,4 +319,9 @@ button:hover {
 .hidden-board {
     opacity: 0 !important;
     pointer-events: none; /* Gayab hone ke baad click na ho */
+}
+
+@keyframes marquee {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
 }
