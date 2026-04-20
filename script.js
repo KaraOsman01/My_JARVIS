@@ -139,7 +139,7 @@ recognition.onresult = async (event) => {
 // ==============================
 // GEMINI API (AI BRAIN)
 // ==============================
-async function askGemini(prompt) {
+async function askGemini(prompt,userInput, imageData = null, mimeType = null) {
     const url = "/api/gemini";
     
     // User ka message history mein daalein
@@ -178,6 +178,22 @@ EMOTIONAL GUIDELINES:
     5. Context: You are part of a high-tech development environment. Act like a project partner, not just a search engine.
     `;
     
+    let messageParts = [{ text: userInput }];
+
+    // Agar image data maujood hai toh usey parts mein add karna
+    if (imageData && mimeType) {
+        messageParts.push({
+            inline_data: {
+                mime_type: mimeType,
+                data: imageData
+            }
+        });
+    }
+
+    const requestBody = {
+        contents: [{ parts: messageParts }],
+        system_instruction: { parts: [{ text: systemInstruction }] }
+    };
     try {
         const res = await fetch(url, {
             method: "POST",
@@ -856,3 +872,239 @@ function toggleStatusBoard(show) {
         }
     }
 }
+
+// ==================================
+// UPLOAD FILE OPTION 
+// ==================================
+
+const createUploadUI = () => {
+    // 1. Hidden file input create karna
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.id = 'universal-file-input';
+    fileInput.multiple = true;
+    fileInput.accept = "image/*, .html, .css, .js, .txt, .pdf";
+    fileInput.style.display = 'none';
+    document.body.appendChild(fileInput);
+
+    // 2. Floating Button create karna
+    const uploadBtn = document.createElement('button');
+    uploadBtn.innerHTML = '&#128206;'; // Paperclip emoji
+    uploadBtn.style.cssText = `
+        position: fixed;
+        bottom: 30px;
+        left: 30px;
+        width: 60px;
+        height: 60px;
+        background: rgba(0, 0, 0, 0.8);
+        border: 2px solid #00ffff;
+        color: #00ffff;
+        border-radius: 50%;
+        font-size: 30px;
+        cursor: pointer;
+        box-shadow: 0 0 15px #00ffff;
+        z-index: 9999;
+    `;
+    document.body.appendChild(uploadBtn);
+
+    // Button click hone par input trigger karna
+    uploadBtn.onclick = () => fileInput.click();
+
+    return fileInput;
+};
+
+const universalInput = createUploadUI();
+
+// --- Step 2: Handle the Files ---
+universalInput.onchange = async (e) => {
+    const files = e.target.files;
+    if (files.length === 0) return;
+
+    speak("Files received, Sir. Analyzing the content now.");
+
+    for (let file of files) {
+        const reader = new FileReader();
+
+        // Agar Image hai (Screenshot/Gallery)
+        if (file.type.startsWith('image/')) {
+            reader.readAsDataURL(file);
+            reader.onload = async () => {
+                const base64Data = reader.result.split(',')[1];
+                // Yahan aap apna Gemini API call function use karein
+                const response = await askGeminiWithImage(base64Data, file.type);
+                speak(response);
+            };
+        } 
+        // Agar Text/Code file hai
+        else {
+            reader.readAsText(file);
+            reader.onload = async () => {
+                const textContent = reader.result;
+                const response = await askGemini("Analyze this file content: " + textContent);
+                speak(response);
+            };
+        }
+    }
+};
+
+// -----------------------------------------------------------------------------
+// PART 1: UI Elements (Put this in your main initialization or HTML)
+// -----------------------------------------------------------------------------
+
+// 1. A dedicated button for all upload types (looks like a paperclip or cloud)
+const uploadBtn = document.createElement('button');
+uploadBtn.id = 'jarvis-upload-btn';
+uploadBtn.innerHTML = '&#128206;'; // Standard Paperclip Icon
+uploadBtn.style.cssText = `
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: transparent;
+    border: 2px solid #00ffff;
+    color: #00ffff;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 1000;
+    transition: all 0.3s ease;
+`;
+uploadBtn.title = 'Upload image, document, or screenshot';
+document.body.appendChild(uploadBtn);
+
+// 2. A hidden universal file input
+const universalFileInput = document.createElement('input');
+universalFileInput.type = 'file';
+universalFileInput.id = 'universal-file-input';
+universalFileInput.multiple = true; // IMPORTANT: Allow multiple file selection
+universalFileInput.style.display = 'none';
+// Allow images and common document/code types
+universalFileInput.accept = "image/png, image/jpeg, image/gif, .js, .html, .css, .txt, .json, .pdf, .md, .svg";
+document.body.appendChild(universalFileInput);
+
+// Link the button to the hidden input
+uploadBtn.addEventListener('click', () => universalFileInput.click());
+
+
+// -----------------------------------------------------------------------------
+// PART 2: Universal File Handling & API Integration (The Logic)
+// -----------------------------------------------------------------------------
+
+// Main handler for the file input change event
+universalFileInput.addEventListener('change', async (event) => {
+    const files = event.target.files;
+    if (files.length === 0) return;
+
+    // Optional: Visual feedback that files are processing
+    speak("Processing files, Sir. One moment.");
+    console.log(`Processing ${files.length} files...`);
+
+    // Array to hold the prepared data for the Gemini request
+    const partsForApi = [];
+
+    // Iterate through all selected files
+    for (let file of files) {
+        try {
+            if (file.type.startsWith('image/')) {
+                // Handling Images (Gallary, Screenshots)
+                console.log(`Handling Image: ${file.name}`);
+                const base64Data = await convertImageToBase64(file);
+                
+                // Add to API parts with proper Gemini structure
+                partsForApi.push({
+                    inlineData: {
+                        mimeType: file.type,
+                        data: base64Data
+                    }
+                });
+            } else {
+                // Handling Documents and Code (Text-based)
+                console.log(`Handling Document: ${file.name}`);
+                const fileText = await readDocumentAsText(file);
+                
+                // Add to API parts as a text block
+                partsForApi.push({
+                    text: `[File: ${file.name}] \n\n${fileText}\n`
+                });
+            }
+        } catch (error) {
+            console.error(`Failed to process ${file.name}:`, error);
+            // Optional: User feedback for failure
+            // speak(`Apologies, Sir. I couldn't read ${file.name}. It may be corrupted.`);
+        }
+    }
+
+    // Now, send all collected parts + a universal prompt to Gemini
+    if (partsForApi.length > 0) {
+        // Universal prompt: "Here are the files you requested..."
+        // JARVIS will figure out what to do with them.
+        partsForApi.push({
+text: `[User has uploaded ${files.length} file(s)]. Analyze the provided images and/or code contents. Offer a direct summary of their contents, identify any clear errors, and suggest potential optimizations or actions, while remaining empathetic to the user's workflow.`
+        });
+
+        console.log("Sending files data to Gemini API...");
+        // YOUR API CALL FUNCTION (Assuming 'askGemini' takes a single 'requestBody' object)
+        const response = await askGemini(partsForApi); 
+        
+        // Output the result
+        speak(response); 
+    }
+});
+
+
+// -----------------------------------------------------------------------------
+// PART 3: Helper Functions (Required)
+// -----------------------------------------------------------------------------
+
+// Helper 1: Converts an image file (gallery/screenshot) to Base64 string
+function convertImageToBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file); // Reads the file and gives Base64
+        reader.onload = () => {
+            // Remove the 'data:image/jpeg;base64,' prefix
+            const base64String = reader.result.split(',')[1];
+            resolve(base64String);
+        };
+        reader.onerror = (error) => reject(error);
+    });
+}
+
+// Helper 2: Reads documents (code, txt, pdf*) as raw text
+function readDocumentAsText(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsText(file); // Use readAsText for text-based files
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+    });
+}
+
+universalInput.onchange = async (e) => {
+    const files = e.target.files;
+    if (files.length === 0) return;
+
+    speak(`Files received, ${currentUserName}. Analyzing now.`);
+
+    for (let file of files) {
+        const reader = new FileReader();
+
+        if (file.type.startsWith('image/')) {
+            reader.readAsDataURL(file);
+            reader.onload = async () => {
+                const base64Data = reader.result.split(',')[1];
+                // Image ke saath sawal bhejna
+                const reply = await askGemini("Sir has uploaded this image. Please analyze it.", base64Data, file.type);
+                speak(reply);
+            };
+        } else {
+            reader.readAsText(file);
+            reader.onload = async () => {
+                const textContent = reader.result;
+                const reply = await askGemini(`Analyze this file content named ${file.name}: \n\n ${textContent}`);
+                speak(reply);
+            };
+        }
+    }
+};
