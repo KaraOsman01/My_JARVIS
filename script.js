@@ -1,3 +1,5 @@
+const micBtn = document.getElementById("micBtn"); 
+
 // ==============================
 // JARVIS VOICE ASSISTANT CORE
 // ==============================
@@ -609,9 +611,6 @@ function runUpdate() {
 // ==============================
 // CUSTOM SMART SPEAK
 // ==============================
-
-const micBtn = document.getElementById("mic-btn"); 
-const output = document.getElementById("output");
 
 function speak(text) {
 
