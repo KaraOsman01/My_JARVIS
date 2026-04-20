@@ -14,21 +14,27 @@ window.speechSynthesis.onvoiceschanged = () => {
 
 let currentUserName = "Sir/Ma'am";
 
-function updateIdentity(text) {
-    const patterns = [
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        const initialGreeting = "System initialized. Identity not confirmed. May I know who I am assisting today?";
+        speak(initialGreeting); // Aapka existing speak function use ho raha hai
+    }, 1500); // 1.5 seconds ka delay taaki page load ho jaye
+});
+
+function processUserIdentity(text) {
+    const introPatterns = [
         /my name is (.*)/i,
         /i am (.*)/i,
-        /call me (.*)/i,
-        /this is (.*)/i
+        /this is (.*)/i,
+        /call me (.*)/i
     ];
 
-    for (let regex of patterns) {
-        const match = text.match(regex);
+    for (let pattern of introPatterns) {
+        const match = text.match(pattern);
         if (match && match[1]) {
-            let foundName = match[1].trim().split(" ")[0];
-            // Name ko clean aur capitalize karna (e.g. aamir -> Aamir)
-            currentUserName = foundName.charAt(0).toUpperCase() + foundName.slice(1);
-            return true; 
+            let name = match[1].trim().split(" ")[0]; // Pehla word uthayega
+            currentUserName = name.charAt(0).toUpperCase() + name.slice(1);
+            return true;
         }
     }
     return false;
@@ -206,6 +212,15 @@ EMOTIONAL GUIDELINES:
 // ==============================
 
 async function handleCommand(cmd) {
+
+      const nameRecognized = processUserIdentity(cmd);
+
+    if (nameRecognized) {
+        const confirmation = `Identity confirmed. Welcome, ${currentUserName}. How may I assist you with your project today?`;
+        speak(confirmation);
+        return; // Yahan se return ho jayega, Gemini ke paas jane ki zarurat nahi
+    }
+    
     const command = cmd.toLowerCase();
 
     // 1. WEATHER COMMAND
