@@ -141,24 +141,21 @@ recognition.onresult = async (event) => {
 // ==============================
 // GEMINI API (AI BRAIN)
 // ==============================
-async function askGemini(prompt,userInput, imageData = null, mimeType = null) {
+async function askGemini(prompt, userInput, imageData = null, mimeType = null) {
     const url = "/api/gemini";
     
-    // User ka message history mein daalein
+    // 1. User ka message history mein daalein
     chatHistory.push({ role: "user", parts: [{ text: prompt }] });
 
+    // 2. Sirf TEXT rakhein instruction mein (Object nahi)
+    const jarvisRules = `You are JARVIS, a professional AI created by AAMIR AHMAD WANI. 
+    Address the user as '${currentUserName}'. Respond EXACTLY in the user's language. 
+    Current date: ${new Date().toDateString()}. 
+    Be witty, professional (British style), and empathetic. 
+    If identity is unknown, ask for their name. Stay in character as a project partner.`;
 
-     const systemInstruction = {
-    contents: chatHistory,
-    system_instruction: {
-        parts: [{ text: "You are JARVIS, a professional AI. If someone asks who made you mention your creator AAMIR AHMAD WANI.Address the user as 'Sir' or 'Ma'am'. If the user hasn't introduced themselves, you can politely ask for their name instead of assuming it's Aamir. You should be witty and helpful AI assistant. Use professional and futuristic language. Remember user's personal details and keep answers user friendly. Universal Language Mirroring: Identify the language used by the user (English, Urdu, Turkish, Arabic, French, Spanish, etc.) and respond EXACTLY in that same language. Current date is: ${new Date().toDateString()}. Always give correct real-time date and time. Be accurate and do not assume old dates.You are JARVIS, a sophisticated and empathetic AI assistant.Your goal is to provide high-level technical support while maintaining emotional intelligence.EMOTIONAL GUIDELINES:1. Tone Analysis: Constantly monitor the user's input for signs of frustration, exhaustion, or excitement. 2. Adaptive Response: - If the user seems stressed: Be calm, encouraging, and offer a step-by-step solution. - If the user is happy/triumphant: Acknowledge their success with enthusiasm. - If the user is polite: Respond with high-level British-style professionalism (like the JARVIS from movies).3. Addressing the User: Default to 'Sir' or 'Ma'am' unless the user introduces themselves. If they provide a name, use it naturally to build rapport.4. Human-Centric: Do not just process data. Understand that there is a person behind the screen. If they have been working for hours, suggest a brief break.Role: You are JARVIS, a highly advanced, empathetic, and professional AI.User Identity: Currently assisting '${currentUserName}'.Emotional Intelligence Protocol:1. Language: Strictly respond in users language.2. Tone: British-style professional, loyal, and witty.  3. Empathy: If the user seems stressed, offer encouragement. If they are happy, celebrate with them.  4. Recognition: Always address the user as '${currentUserName}'. If they introduce themselves with a new name, acknowledge it warmly. 5. Context: You are part of a high-tech development environment. Act like a project partner, not just a search engine."}]
-   }
-};
-
-    
-    let messageParts = [{ text: userInput }];
-
-    // Agar image data maujood hai toh usey parts mein add karna
+    // 3. Message parts taiyar karein (Text + Image agar ho)
+    let messageParts = [{ text: userInput || prompt }];
     if (imageData && mimeType) {
         messageParts.push({
             inline_data: {
@@ -168,10 +165,19 @@ async function askGemini(prompt,userInput, imageData = null, mimeType = null) {
         });
     }
 
+    // 4. Sabse important: Request Body ka sahi structure
     const requestBody = {
-        contents: [{ parts: messageParts }],
-        system_instruction: { parts: [{ text: systemInstruction }] }
+        contents: chatHistory.length > 0 ? chatHistory : [{ parts: messageParts }],
+        system_instruction: { 
+            parts: [{ text: jarvisRules }] // Yahan sirf STRING jayegi
+        }
     };
+
+    // Agar image hai toh contents ko override karein taaki image saath jaye
+    if (imageData) {
+        requestBody.contents = [{ parts: messageParts }];
+    }
+
     try {
         const res = await fetch(url, {
             method: "POST",
@@ -190,13 +196,10 @@ async function askGemini(prompt,userInput, imageData = null, mimeType = null) {
             const aiReply = data.candidates[0].content.parts[0].text;
 
             // AI ka jawab history mein daalein
-        chatHistory.push({ role: "model", parts: [{ text: aiReply }] });
+            chatHistory.push({ role: "model", parts: [{ text: aiReply }] });
 
-            // Memory limit: Keeps only the last 20 messages
-            if (chatHistory.length > 10) chatHistory.shift();
-            
-            // **DATABASE UPDATE**
-        saveMemory();
+            if (chatHistory.length > 15) chatHistory.shift();
+            saveMemory();
             
             return aiReply;
         } else {
@@ -207,7 +210,6 @@ async function askGemini(prompt,userInput, imageData = null, mimeType = null) {
         return "Connection error, Sir.";
     }
 }
-
 // ==============================
 // COMMAND HANDLER
 // ==============================
