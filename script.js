@@ -239,7 +239,7 @@ async function handleCommand(cmd) {
     
     const nameRecognized = processUserIdentity(cmd);
 
-    if (text.includes("my name is") || text.includes("i am")) {
+    if (command.includes("my name is") || command.includes("i am")) {
         const nameRecognized = processUserIdentity(text); // Woh function jo humne pehle banaya tha
         if (nameRecognized) {
             speak(`Identity confirmed. Welcome, ${currentUserName}. How may I assist you?`);
@@ -609,6 +609,9 @@ function runUpdate() {
 // ==============================
 // CUSTOM SMART SPEAK
 // ==============================
+
+const micBtn = document.getElementById("mic-btn"); 
+const output = document.getElementById("output");
 
 function speak(text) {
 
