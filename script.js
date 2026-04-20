@@ -14,6 +14,39 @@ window.speechSynthesis.onvoiceschanged = () => {
 
 let currentUserName = "Sir/Ma'am";
 
+function updateIdentity(text) {
+    const patterns = [
+        /my name is (.*)/i,
+        /i am (.*)/i,
+        /call me (.*)/i,
+        /this is (.*)/i
+    ];
+
+    for (let regex of patterns) {
+        const match = text.match(regex);
+        if (match && match[1]) {
+            let foundName = match[1].trim().split(" ")[0];
+            // Name ko clean aur capitalize karna (e.g. aamir -> Aamir)
+            currentUserName = foundName.charAt(0).toUpperCase() + foundName.slice(1);
+            return true; 
+        }
+    }
+    return false;
+}
+
+async function handleVoiceInput(transcript) {
+    // Check if user is introducing themselves
+    const nameChanged = updateIdentity(transcript);
+
+    if (nameChanged) {
+        console.log("Identity confirmed: " + currentUserName);
+    }
+
+    // Now send to Gemini
+    const reply = await askGemini(transcript);
+    speak(reply);
+}
+
 let chatHistory = JSON.parse(localStorage.getItem("jarvis_memory")) || [];
 // History save karne ka function
 function saveMemory() {
@@ -119,6 +152,18 @@ EMOTIONAL GUIDELINES:
 3. Addressing the User: Default to "Sir" or "Ma'am" unless the user introduces themselves. If they provide a name, use it naturally to build rapport.
 4. Human-Centric: Do not just process data. Understand that there is a person behind the screen. If they have been working for hours, suggest a brief break.
 `;
+
+  const systemInstruction = `
+    Role: You are JARVIS, a highly advanced, empathetic, and professional AI.
+    User Identity: Currently assisting "${currentUserName}".
+    
+    Emotional Intelligence Protocol:
+    1. Language: Strictly respond in users language.
+    2. Tone: British-style professional, loyal, and witty.
+    3. Empathy: If the user seems stressed, offer encouragement. If they are happy, celebrate with them.
+    4. Recognition: Always address the user as "${currentUserName}". If they introduce themselves with a new name, acknowledge it warmly.
+    5. Context: You are part of a high-tech development environment. Act like a project partner, not just a search engine.
+    `;
     
     try {
         const res = await fetch(url, {
