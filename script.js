@@ -14,12 +14,19 @@ window.speechSynthesis.onvoiceschanged = () => {
 
 let currentUserName = "Sir/Ma'am";
 
-window.addEventListener('load', () => {
-    setTimeout(() => {
-        const initialGreeting = "System initialized. Identity not confirmed. May I know who I am assisting today?";
-        speak(initialGreeting); // Aapka existing speak function use ho raha hai
-    }, 1500); // 1.5 seconds ka delay taaki page load ho jaye
-});
+function onWakeWordDetected() {
+    // Agar naam abhi tak "Sir/Ma'am" hi hai (matlab confirm nahi hua)
+    if (currentUserName === "Sir/Ma'am") {
+        const greeting = "System online. Identity not confirmed. May I know who I am assisting today?";
+        speak(greeting);
+        
+        // Yahan aap mic ko phir se active kar sakte hain taaki user naam bata sake
+        startListeningForName(); 
+    } else {
+        // Agar naam pehle se pata hai
+        speak(`Online and ready, ${currentUserName}. How can I help?`);
+    }
+}
 
 function processUserIdentity(text) {
     const introPatterns = [
@@ -212,16 +219,18 @@ EMOTIONAL GUIDELINES:
 // ==============================
 
 async function handleCommand(cmd) {
+    const command = cmd.toLowerCase();
+    
+    const nameRecognized = processUserIdentity(cmd);
 
-      const nameRecognized = processUserIdentity(cmd);
-
-    if (nameRecognized) {
-        const confirmation = `Identity confirmed. Welcome, ${currentUserName}. How may I assist you with your project today?`;
-        speak(confirmation);
-        return; // Yahan se return ho jayega, Gemini ke paas jane ki zarurat nahi
+    if (text.includes("my name is") || text.includes("i am")) {
+        const nameRecognized = processUserIdentity(text); // Woh function jo humne pehle banaya tha
+        if (nameRecognized) {
+            speak(`Identity confirmed. Welcome, ${currentUserName}. How may I assist you?`);
+            return; 
+        }
     }
     
-    const command = cmd.toLowerCase();
 
     // 1. WEATHER COMMAND
     if (command.includes("weather") || command.includes("mausam")) {
