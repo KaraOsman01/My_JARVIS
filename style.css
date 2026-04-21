@@ -92,7 +92,6 @@ button:hover {
 /* --- The Core Wave Structure --- */
 .ring {
   position: absolute;
-  transition: transform 0.1s ease-out; 
   /* Shuruat mein unique shape (gol nahi) */
   border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; 
   border: 5px solid var(--neon-cyan);
@@ -109,9 +108,9 @@ button:hover {
 .ring-1 {
   width: 80px;
   height: 80px;
-  border: 2px solid #ff0000;
+  border: 2px solid #00ffff;
   border-radius: 50%;
-  animation: pulse-ring 1.5s infinite ease-in-out;
+  animation: pulse-ring 2.5s infinite ease-in-out;
   opacity: 0.6;
 }
 
@@ -119,9 +118,9 @@ button:hover {
 .ring-2 {
   width: 105px;
   height: 105px;
-  border: 1px solid #f0f0f0;
+  border: 1px solid  #00ffff;
   border-radius: 50%;
-  animation:  pulse-ring  1.5s infinite ease-in-out;
+  animation:  pulse-ring  2.5s infinite ease-in-out;
   opacity: 0.5;
 }
 
@@ -129,9 +128,9 @@ button:hover {
 .ring-3 {
   width: 130px;
   height: 130px;
-  border: 2px solid #0f0f0f;
+  border: 2px solid  #00ffff;
   border-radius: 50%;
-  animation: pulse-ring 1.5s infinite ease-in-out;
+  animation: pulse-ring 2.5s infinite ease-in-out;
   opacity: 0.4;
 }
 
@@ -140,43 +139,42 @@ button:hover {
   height: 60px;
   border: 1px solid #00ffff;
   border-radius: 50%;
-  animation: pulse-ring 1.5s infinite ease-in-out;
+  animation: pulse-ring 2.5s infinite ease-in-out;
   opacity: 0.4;
 }
 
 .ring-5 {
   width: 40px;
   height: 40px;
-  border: 2px solid #ff00ff;
+  border: 2px solid  #00ffff;
   border-radius: 50%;
-  animation: pulse-ring 1.5s infinite ease-in-out;
+  animation: pulse-ring 2.5s infinite ease-in-out;
   opacity: 0.4;
 }
 
 .ring-6 {
   width: 20px;
   height: 20px;
-  border: 1px solid #ffff00;
+  border: 1px solid  #00ffff;
   border-radius: 50%;
-  animation: pulse-ring 1.5s infinite ease-in-out;
+  animation: pulse-ring 2.5s infinite ease-in-out;
   opacity: 0.4;
 }
 
 .ring-7 {
   width: 5px;
   height: 5px;
-  border: 2px solid #00ff00;
+  border: 2px solid #00ffff;
   border-radius: 50%;
-  animation: pulse-ring 1.5s infinite ease-in-out;
+  animation: pulse-ring 2.5s infinite ease-in-out;
   opacity: 0.4;
 }
 
- pulse-ring {
-    0% {  
-      transform: scale(0.8); opacity: 1; }
-    100% { 
-      transform: scale(1.5); opacity: 0; }
+ @keyframes pulse-ring {
+    0% { transform: scale(0.8); opacity: 1; }
+    100% { transform: scale(1.5); opacity: 0; }
 }
+
 
 /* Jab Jarvis bolega, waves tez aur magenta ho jayengi */
 .reactive-speak .ring {
@@ -187,7 +185,7 @@ button:hover {
 
 /* Jab Jarvis sunega, waves thodi tez hongi but cyan rahengi */
 .reactive-listen .ring {
-  animation-duration: 3s; /* Slightly faster than idle */
+  animation-duration: 4s; /* Slightly faster than idle */
    box-shadow: 0 0 20px cyan, 0 0 60px cyan;
 }
 
