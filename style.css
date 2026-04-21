@@ -62,14 +62,14 @@ button {
   border: 2px solid #00f7ff;
   padding: 15px;
   border-radius: 50%;
-  font-size: 20px;
+  font-size: 10px;
   color: #00f7ff;
-  box-shadow: 0 0 110px #00f7ff;
+  box-shadow: 0 0 150px #00f7ff;
   cursor: pointer;
 }
 
 button:hover {
-  box-shadow: 0 0 30px #00f7ff;
+  box-shadow: 0 0 40px #00f7ff;
 } 
 
 :root {
@@ -109,7 +109,7 @@ button:hover {
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  animation: /*liquid-wave*/  pulse-ring 4s infinite ease-in-out;
+  animation: liquid-wave  pulse-ring 4s infinite ease-in-out;
   opacity: 0.6;
 }
 
@@ -118,7 +118,7 @@ button:hover {
   width: 105px;
   height: 105px;
   border-radius: 50%;
-  animation: /*liquid-wave-counter*/ pulse-ring  6s infinite ease-in-out;
+  animation: liquid-wave-counter pulse-ring  6s infinite ease-in-out;
   opacity: 0.5;
 }
 
@@ -135,7 +135,7 @@ button:hover {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  animation: /*liquid-wave*/ pulse-ring 2.5s infinite ease-in-out;
+  animation: liquid-wave pulse-ring 2.5s infinite ease-in-out;
   opacity: 0.4;
 }
 
@@ -151,7 +151,7 @@ button:hover {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  animation: /*liquid-wave*/ pulse-ring 0.8s infinite ease-in-out;
+  animation: liquid-wave pulse-ring 0.8s infinite ease-in-out;
   opacity: 0.4;
 }
 
