@@ -110,7 +110,7 @@ button:hover {
   height: 80px;
   border: 2px solid #00ffff;
   border-radius: 50%;
-  animation: pulse-ring 0.4s infinite ease;
+  animation: pulse-ring 1s infinite ease-in-out;
   opacity: 0.6;
 }
 
@@ -120,7 +120,7 @@ button:hover {
   height: 105px;
   border: 1px solid #00ffff;
   border-radius: 50%;
-  animation:  pulse-ring  0.4s infinite ease;
+  animation:  pulse-ring  1s infinite ease-in-out;
   opacity: 0.5;
 }
 
@@ -130,7 +130,7 @@ button:hover {
   height: 130px;
   border: 2px solid #00ffff;
   border-radius: 50%;
-  animation: pulse-ring 0.4s infinite ease;
+  animation: pulse-ring 1s infinite ease-in-out;
   opacity: 0.4;
 }
 
@@ -139,7 +139,7 @@ button:hover {
   height: 60px;
   border: 1px solid #00ffff;
   border-radius: 50%;
-  animation: pulse-ring 0.4s infinite ease-in-out;
+  animation: pulse-ring 1s infinite ease-in-out;
   opacity: 0.4;
 }
 
@@ -148,7 +148,7 @@ button:hover {
   height: 40px;
   border: 2px solid #00ffff;
   border-radius: 50%;
-  animation: pulse-ring 0.4s infinite ease;
+  animation: pulse-ring 1s infinite ease-in-out;
   opacity: 0.4;
 }
 
@@ -157,7 +157,7 @@ button:hover {
   height: 20px;
   border: 1px solid #00ffff;
   border-radius: 50%;
-  animation: pulse-ring 0.4s infinite ease;
+  animation: pulse-ring 1s infinite ease-in-out;
   opacity: 0.4;
 }
 
@@ -166,7 +166,7 @@ button:hover {
   height: 5px;
   border: 2px solid #00ffff;
   border-radius: 50%;
-  animation: pulse-ring 0.4s infinite ease;
+  animation: pulse-ring 1s infinite ease-in-out;
   opacity: 0.4;
 }
 
