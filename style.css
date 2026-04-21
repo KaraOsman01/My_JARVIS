@@ -92,6 +92,7 @@ button:hover {
 /* --- The Core Wave Structure --- */
 .ring {
   position: absolute;
+  transition: transform 0.1s ease-out; 
   /* Shuruat mein unique shape (gol nahi) */
   border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; 
   border: 5px solid var(--neon-cyan);
