@@ -172,11 +172,11 @@ button:hover {
 
  pulse-ring {
     0% { 
-      transform: rotate(0deg)
-      transform: scale(0.8); opacity: 1; }
+      transform: rotate(0deg);
+      /*transform: scale(0.8); opacity: 1;*/ }
     100% { 
-      transform: rotate(360deg)
-      transform: scale(1.5); opacity: 0; }
+      transform: rotate(360deg);
+      /*transform: scale(1.5); opacity: 0;*/ }
 }
 
 /* Jab Jarvis bolega, waves tez aur magenta ho jayengi */
