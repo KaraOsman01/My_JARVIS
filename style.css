@@ -108,7 +108,8 @@ button:hover {
 .ring-1 {
   width: 80px;
   height: 80px;
-  animation: liquid-wave 4s infinite ease-in-out;
+  border-radius: 50%;
+  animation: /*liquid-wave*/  pulse-ring 4s infinite ease-in-out;
   opacity: 0.6;
 }
 
@@ -116,7 +117,8 @@ button:hover {
 .ring-2 {
   width: 105px;
   height: 105px;
-  animation: liquid-wave-counter 6s infinite ease-in-out;
+  border-radius: 50%;
+  animation: /*liquid-wave-counter*/ pulse-ring  6s infinite ease-in-out;
   opacity: 0.5;
 }
 
@@ -132,7 +134,8 @@ button:hover {
 .ring-4 {
   width: 60px;
   height: 60px;
-  animation: liquid-wave 2.5s infinite ease-in-out;
+  border-radius: 50%;
+  animation: /*liquid-wave*/ pulse-ring 2.5s infinite ease-in-out;
   opacity: 0.4;
 }
 
@@ -147,7 +150,8 @@ button:hover {
 .ring-6 {
   width: 20px;
   height: 20px;
-  animation: liquid-wave 0.8s infinite ease-in-out;
+  border-radius: 50%;
+  animation: /*liquid-wave*/ pulse-ring 0.8s infinite ease-in-out;
   opacity: 0.4;
 }
 
