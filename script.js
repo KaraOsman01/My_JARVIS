@@ -176,7 +176,11 @@ async function askGemini(prompt, userInput, imageData = null, mimeType = null) {
     // Agar image hai toh contents ko override karein taaki image saath jaye
     if (imageData) {
         requestBody.contents = [{ parts: messageParts }];
-    }
+        output.innerHTML = `<span class="analysing-text">SCANNING DATA... ANALYSING IMAGE...</span>`;
+         updateVisualCoreState('speaking');
+         }  else {
+            output.innerText = "Jarvis is 🧠 Thinking...";
+        }
 
     try {
         const res = await fetch(url, {
