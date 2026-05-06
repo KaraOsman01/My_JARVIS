@@ -5,5 +5,17 @@ console.log("JARVIS initialized.");
 
 window.onload = () => {
 
-    startRecognition();
+    const micBtn =
+        document.getElementById("micBtn");
+
+    if (micBtn) {
+
+        micBtn.addEventListener(
+            "click",
+            () => {
+
+                startRecognition();
+            }
+        );
+    }
 };
