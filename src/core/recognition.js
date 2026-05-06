@@ -18,29 +18,79 @@ recognition.continuous = false;
 
 recognition.interimResults = false;
 
+let isRecognitionActive = false;
+
+// =======================
+// START
+// =======================
+
 recognition.onstart = () => {
+
+    console.log("Mic started");
+
+    isRecognitionActive = true;
 
     updateVisualCoreState("listening");
 };
+
+// =======================
+// RESULT
+// =======================
 
 recognition.onresult = async (event) => {
 
     const transcript =
         event.results[0][0].transcript;
 
+    console.log("User said:", transcript);
+
     await handleCommand(transcript);
 };
 
+// =======================
+// END
+// =======================
+
 recognition.onend = () => {
 
-    setTimeout(() => {
+    console.log("Mic ended");
 
-        recognition.start();
+    isRecognitionActive = false;
 
-    }, 500);
+    updateVisualCoreState("idle");
 };
+
+// =======================
+// ERROR
+// =======================
+
+recognition.onerror = (event) => {
+
+    console.log(
+        "Recognition error:",
+        event.error
+    );
+
+    isRecognitionActive = false;
+};
+
+// =======================
+// SAFE START
+// =======================
 
 export function startRecognition() {
 
-    recognition.start();
+    if (isRecognitionActive) return;
+
+    try {
+
+        recognition.start();
+
+    } catch (err) {
+
+        console.log(
+            "Mic start blocked:",
+            err
+        );
+    }
 }
